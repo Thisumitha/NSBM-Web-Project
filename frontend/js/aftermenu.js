@@ -14,6 +14,7 @@ const foods = {
         { name: "Chicken Curry + Rice", price: 850, img: "../Resources/aftermenu/c1.jpg" },
         { name: "Fish Curry + Rice", price: 900, img: "../Resources/aftermenu/c2.jpg" },
         { name: "Vegetable Curry + Rice", price: 650, img: "../Resources/aftermenu/c3.jpg" }
+
     ],
     "Kottu": [
         { name: "Chicken Kottu", price: 900, img: "../Resources/aftermenu/k1.jpg" },
@@ -77,6 +78,12 @@ function loadFoods(category) {
         };
 
         foodContainer.appendChild(card);
+         card.querySelector("button").onclick = () => {
+            localStorage.setItem("foodList", JSON.stringify(foods[category]));
+            localStorage.setItem("selectedFoodName", food.name);
+            window.location.href = "foodDetails.html";
+        };
+
     });
 }
 // Load first category by default
