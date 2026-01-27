@@ -1,0 +1,109 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Body */
+body {
+    background: #f4f6f9;
+    color: #333;
+}
+
+/* Header */
+.main-header {
+    background: linear-gradient(135deg, #003E7E, #FFC300);
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+    border-bottom: 6px solid #001F3F;
+}
+
+.main-header h1 {
+    font-size: 38px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.main-header p {
+    margin-top: 8px;
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* Stores Grid */
+.stores-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+    padding: 40px;
+}
+
+/* Store Card */
+.store-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    border: 2px solid #ffffff;
+}
+
+.store-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    border-color: #003E7E;
+}
+
+/* Store Logo */
+.store-card img {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+/* Store Name */
+.store-card h2 {
+    font-size: 20px;
+    color: #003E7E;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+/* Store Status */
+.store-status {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 25px;
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+.open {
+    background: #e6f7ff;
+    color: #003E7E;
+    border: 1px solid #003E7E;
+}
+
+.closed {
+    background: #fdecea;
+    color: #d93025;
+    border: 1px solid #d93025;
+}
+
+/* Footer */
+.footer {
+    background: #001F3F;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    margin-top: 30px;
+}
