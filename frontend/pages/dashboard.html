@@ -3,256 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NSBM Canteen Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>NSBM Admin - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --nsbm-green: #2E8B57; /* SeaGreen - matching the Green Uni vibe */
-            --nsbm-dark: #1a4d33;
-        }
-        body {
-            background-color: #f0f2f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        /* Sidebar Styling */
-        .sidebar {
-            min-height: 100vh;
-            background-color: var(--nsbm-dark);
-            color: white;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-        }
-        .sidebar .brand-section {
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
-        }
-        .sidebar a {
-            color: rgba(255,255,255,.8);
-            text-decoration: none;
-            padding: 12px 20px;
-            display: block;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            transition: all 0.3s;
-        }
-        .sidebar a:hover, .sidebar a.active {
-            background-color: var(--nsbm-green);
-            color: white;
-            font-weight: 500;
-        }
-        
-        /* Card Styling */
-        .stat-card {
-            border: none;
-            border-radius: 12px;
-            transition: transform 0.2s;
-            overflow: hidden;
-        }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .icon-circle {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            --primary-color: #059669; /* Emerald Green */
+            --dark-sidebar: #0f172a;  /* Slate 900 */
+            --bg-body: #f1f5f9;       /* Slate 100 */
+            --text-main: #334155;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
-        /* Form & Table Styling */
-        .card {
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* --- Sidebar Styling --- */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background-color: var(--dark-sidebar);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            padding: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: #94a3b8; /* Slate 400 */
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-link i { font-size: 1.1rem; margin-right: 12px; }
+
+        /* --- Main Content --- */
+        .main-content {
+            margin-left: 260px;
+            padding: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+
+        /* --- Cards & UI --- */
+        .content-card {
+            background: white;
+            border-radius: 16px;
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
         }
-        .card-header {
-            background-color: white;
-            border-bottom: 1px solid #eee;
-            padding: 15px 20px;
-            font-weight: bold;
-            color: var(--nsbm-dark);
+
+        .card-header-custom {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
         }
-        .btn-nsbm {
-            background-color: var(--nsbm-green);
-            color: white;
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8fafc;
         }
-        .btn-nsbm:hover {
-            background-color: var(--nsbm-dark);
-            color: white;
+        .upload-area:hover { border-color: var(--primary-color); background: #f0fdf4; }
+
+        /* Table Styling */
+        .table thead th {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            background-color: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 12px 24px;
+        }
+        
+        .table tbody td {
+            padding: 16px 24px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* Status Badges */
+        .badge-soft { padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
+        .badge-soft-success { background-color: #dcfce7; color: #166534; }
+        .badge-soft-danger  { background-color: #fee2e2; color: #991b1b; }
+        
+        .stall-logo {
+            width: 40px; 
+            height: 40px; 
+            object-fit: cover;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
 
-<div class="container-fluid">
-    <div class="row">
+<nav class="sidebar" id="sidebar">
+    <a href="#" class="sidebar-brand">
+        <div class="bg-success rounded-circle p-1 me-2 d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;">
+            <i class="bi bi-mortarboard-fill text-white" style="font-size: 0.9rem;"></i>
+        </div>
+        NSBM Admin
+    </a>
+    
+    <div class="nav flex-column">
+        <a href="#" class="nav-link active"><i class="bi bi-grid-1x2"></i>Dashboard</a>
+        <a href="#" class="nav-link"><i class="bi bi-shop"></i>Outlets & Stalls</a>
+        <a href="#" class="nav-link"><i class="bi bi-receipt"></i>Transactions</a>
+        <a href="#" class="nav-link"><i class="bi bi-people"></i>User Mgmt</a>
+        <a href="#" class="nav-link"><i class="bi bi-graph-up"></i>Analytics</a>
+    </div>
+
+    <div style="position: absolute; bottom: 20px; left: 24px; right: 24px;">
+        <a href="#" class="nav-link text-danger ps-0"><i class="bi bi-box-arrow-left"></i> Logout</a>
+    </div>
+</nav>
+
+<div class="main-content">
+    
+    <button class="btn btn-dark d-md-none mb-3" onclick="document.getElementById('sidebar').classList.toggle('show')">
+        <i class="bi bi-list"></i> Menu
+    </button>
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h3 class="fw-bold mb-1">Dashboard Overview</h3>
+            <p class="text-secondary mb-0">Manage your food court operations.</p>
+        </div>
+        <button class="btn btn-outline-secondary rounded-pill px-3 bg-white" onclick="loadStalls()">
+            <i class="bi bi-arrow-clockwise me-2"></i>Refresh Data
+        </button>
+    </div>
+
+    <div class="row g-4">
         
-        <div class="col-md-3 col-lg-2 sidebar collapse d-md-block" id="sidebarMenu">
-            <div class="text-center brand-section">
-                <i class="bi bi-mortarboard-fill fs-1 text-success mb-2 bg-white rounded-circle p-2"></i>
-                <h5 class="mt-2 mb-0">NSBM Canteen</h5>
-                <small class="text-white-50">Admin Portal</small>
-            </div>
-            <nav class="px-2">
-                <a href="#" class="active"><i class="bi bi-grid-fill me-2"></i> Dashboard</a>
-                <a href="#"><i class="bi bi-shop-window me-2"></i> Outlets & Stalls</a>
-                <a href="#"><i class="bi bi-menu-button-wide me-2"></i> Food Menus</a>
-                <a href="#"><i class="bi bi-basket2 me-2"></i> Student Orders</a>
-                <a href="#"><i class="bi bi-people-fill me-2"></i> Users (Students)</a>
-                <a href="#"><i class="bi bi-bar-chart-fill me-2"></i> Reports</a>
-                <div class="mt-5 pt-3 border-top border-secondary">
-                    <a href="#" class="text-danger"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+        <div class="col-lg-4">
+            <div class="content-card h-100">
+                <div class="card-header-custom">
+                    <h6 class="fw-bold m-0 text-dark"><i class="bi bi-plus-circle me-2"></i>Register Outlet</h6>
                 </div>
-            </nav>
+                <div class="p-4">
+                    <form id="addStallForm">
+                        
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-secondary">Outlet Logo</label>
+                            <div class="upload-area" onclick="document.getElementById('stallImage').click()">
+                                <i class="bi bi-cloud-arrow-up fs-2 text-secondary" id="uploadIcon"></i>
+                                <p class="small text-muted mb-0 mt-2 fw-bold" id="uploadText">Click to upload image</p>
+                                <input type="file" id="stallImage" name="image" hidden accept="image/*" onchange="previewFile()">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Stall Name</label>
+                            <input type="text" class="form-control" name="name" id="stallName" required placeholder="e.g. Spicy Wok">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-secondary">Owner Name</label>
+                            <input type="text" class="form-control" name="owner" id="stallOwner" required placeholder="e.g. Mr. Perera">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Category</label>
+                                <select class="form-select" name="category" id="stallCategory">
+                                    <option value="Main">Main Dish</option>
+                                    <option value="Snack">Short Eats</option>
+                                    <option value="Beverage">Beverage</option>
+                                </select>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small fw-bold text-secondary">Status</label>
+                                <select class="form-select" name="status" id="stallStatus">
+                                    <option value="Open">Open</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100 py-2 rounded-3 fw-bold mt-2 shadow-sm">
+                            Create Outlet
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
 
-        <main class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4">
-            
-            <button class="btn btn-nsbm d-md-none mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
-                <i class="bi bi-list"></i> Menu
-            </button>
-
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-4">
-                <div>
-                    <h2 class="h3 fw-bold text-dark">Welcome back, Admin! 👋</h2>
-                    <p class="text-muted">Here's what's happening at NSBM Food Court today.</p>
+        <div class="col-lg-8">
+            <div class="content-card h-100">
+                <div class="card-header-custom">
+                    <h6 class="fw-bold m-0 text-dark">Active Canteen Outlets</h6>
+                    <span class="badge bg-light text-secondary border" id="totalCount">0 Total</span>
                 </div>
-                <div>
-                    <span class="badge bg-light text-dark border p-2 me-2"><i class="bi bi-calendar3"></i> Today</span>
-                    <button class="btn btn-nsbm"><i class="bi bi-plus-lg"></i> Add New Item</button>
-                </div>
-            </div>
-
-            <div class="row g-3 mb-4">
-                <div class="col-md-3">
-                    <div class="card stat-card bg-success text-white p-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1 text-white-50">Total Outlets</h6>
-                                <h2 class="mb-0 fw-bold" id="totalCount">0</h2>
-                            </div>
-                            <div class="icon-circle"><i class="bi bi-shop"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card stat-card bg-primary text-white p-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1 text-white-50">Today's Revenue</h6>
-                                <h2 class="mb-0 fw-bold">LKR 45,000</h2>
-                            </div>
-                            <div class="icon-circle"><i class="bi bi-cash-stack"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card stat-card bg-warning text-dark p-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1 text-black-50">Pending Orders</h6>
-                                <h2 class="mb-0 fw-bold">18</h2>
-                            </div>
-                            <div class="icon-circle bg-white text-warning"><i class="bi bi-bell-fill"></i></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card stat-card bg-info text-white p-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-1 text-white-50">Active Students</h6>
-                                <h2 class="mb-0 fw-bold">1,205</h2>
-                            </div>
-                            <div class="icon-circle"><i class="bi bi-person-badge"></i></div>
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Outlet Info</th>
+                                <th>Category</th>
+                                <th>Owner</th>
+                                <th>Status</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="stallTableBody">
+                            <tr><td colspan="5" class="text-center py-5 text-muted">Loading data...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-lg-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header">
-                            <i class="bi bi-plus-circle-fill text-success me-2"></i>Register New Outlet
-                        </div>
-                        <div class="card-body">
-                            <form id="addStallForm">
-                                <div class="mb-3">
-                                    <label class="form-label small text-muted text-uppercase fw-bold">Stall Name</label>
-                                    <input type="text" class="form-control" id="stallName" placeholder="e.g. Green Kitchen" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label small text-muted text-uppercase fw-bold">Category</label>
-                                    <select class="form-select" id="stallCategory">
-                                        <option value="Rice & Curry">Rice & Curry</option>
-                                        <option value="Fast Food">Fast Food / Short Eats</option>
-                                        <option value="Beverages">Beverages / Juice Bar</option>
-                                        <option value="Desserts">Desserts / Ice Cream</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label small text-muted text-uppercase fw-bold">Owner Name</label>
-                                    <input type="text" class="form-control" id="stallOwner" placeholder="e.g. Mr. Perera">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label small text-muted text-uppercase fw-bold">Status</label>
-                                    <select class="form-select" id="stallStatus">
-                                        <option value="Open">Open Now</option>
-                                        <option value="Closed">Closed</option>
-                                        <option value="Maintenance">Maintenance</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-nsbm w-100 py-2 fw-bold">
-                                    Save Outlet
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-8">
-                    <div class="card h-100">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-list-ul text-success me-2"></i>Active Canteen Outlets</span>
-                            <button class="btn btn-sm btn-outline-secondary">Export List</button>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0 border-top">
-                                <thead class="table-light text-secondary">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Stall Name</th>
-                                        <th>Category</th>
-                                        <th>Owner</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="stallTableBody">
-                                    <tr>
-                                        <td colspan="6" class="text-center text-muted py-4">Loading data from database...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // --- CONFIGURATION ---
+    // Change these paths if your PHP files are in a different folder
+    const API_URL_FETCH = '../../Backend/stallController/get_stalls.php'; 
+    const API_URL_ADD   = '../../Backend/stallController/add_stall.php';
 
-<script src="../js/dashboard.js"></script>
+    // 1. File Upload Preview (Visual only)
+    function previewFile() {
+        const fileInput = document.getElementById('stallImage');
+        const uploadText = document.getElementById('uploadText');
+        const uploadIcon = document.getElementById('uploadIcon');
+        
+        if (fileInput.files && fileInput.files[0]) {
+            uploadText.innerText = fileInput.files[0].name;
+            uploadText.classList.add('text-success');
+            uploadIcon.className = "bi bi-check-circle-fill fs-2 text-success";
+        }
+    }
 
+    // 2. Fetch Data from PHP
+    async function loadStalls() {
+        try {
+            const response = await fetch(API_URL_FETCH);
+            const stalls = await response.json();
+            
+            const tbody = document.getElementById('stallTableBody');
+            const totalCount = document.getElementById('totalCount');
+            
+            tbody.innerHTML = ''; // Clear table
+            totalCount.innerText = `${stalls.length} Total`;
+
+            if(stalls.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted">No outlets found in database.</td></tr>`;
+                return;
+            }
+
+            stalls.forEach(stall => {
+                // Determine Badge Style
+                const badgeClass = stall.status === 'Open' ? 'badge-soft-success' : 'badge-soft-danger';
+                
+                // Determine Image Path (Handle missing images)
+                // Assuming PHP saves images to 'uploads/' folder relative to the root
+                // We add '../' assuming this HTML is in a 'pages/' or 'admin/' folder
+                let imgHtml = '';
+                if(stall.image_path && stall.image_path !== "default.png") {
+                    imgHtml = `<img src="../../Backend/${stall.image_path}" class="stall-logo me-3" alt="logo">`;
+                } else {
+                    // Fallback Icon if no image
+                    imgHtml = `<div class="bg-light rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px"><i class="bi bi-shop text-secondary"></i></div>`;
+                }
+
+                const row = `
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            ${imgHtml}
+                            <div>
+                                <div class="fw-bold text-dark">${stall.name}</div>
+                                <small class="text-muted" style="font-size:0.75rem">ID: #${stall.id}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="text-secondary fw-medium">${stall.category}</span></td>
+                    <td>${stall.owner}</td>
+                    <td><span class="badge ${badgeClass}">${stall.status}</span></td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-light border text-danger"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>`;
+                
+                tbody.innerHTML += row;
+            });
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            document.getElementById('stallTableBody').innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">Error connecting to database.</td></tr>`;
+        }
+    }
+
+    // 3. Add Stall (Send Form Data to PHP)
+    document.getElementById('addStallForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerText;
+        submitBtn.innerText = "Saving...";
+        submitBtn.disabled = true;
+
+        // Create FormData (Automatically handles text fields + file input)
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch(API_URL_ADD, {
+                method: 'POST',
+                body: formData // No headers needed for FormData
+            });
+            
+            const result = await response.json();
+            
+            if(result.success) {
+                // Reset Form
+                this.reset();
+                document.getElementById('uploadText').innerText = "Click to upload image";
+                document.getElementById('uploadText').classList.remove('text-success');
+                document.getElementById('uploadIcon').className = "bi bi-cloud-arrow-up fs-2 text-secondary";
+                
+                // Refresh Table
+                loadStalls();
+                alert("Outlet added successfully!");
+            } else {
+                alert("Error: " + result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert("Failed to connect to server.");
+        } finally {
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Initial Load
+    document.addEventListener('DOMContentLoaded', loadStalls);
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

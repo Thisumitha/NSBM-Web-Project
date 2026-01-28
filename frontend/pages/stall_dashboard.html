@@ -2,156 +2,351 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stall Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSBM EATS - Stall Overview</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-</head>
-<body class="bg-light">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --bg-color: #f3f4f6;
+            --primary-color: #0d6efd;
+        }
 
-<nav class="navbar navbar-dark bg-success">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="#"><i class="bi bi-shop"></i> <span id="stallNameDisplay">My Stall</span></a>
-        <button class="btn btn-outline-light btn-sm" onclick="logout()">Logout</button>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+        }
+
+        /* --- Sidebar (Identical to previous pages) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #1e293b;
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        .sidebar .nav-link {
+            color: #94a3b8;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .sidebar .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            display: block;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+
+        /* --- Dashboard Specific Styles --- */
+        .stat-card {
+            border: none;
+            border-radius: 16px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
+            height: 100%;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            height: 400px; /* Fixed height for chart area */
+        }
+
+        .top-item-row {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .top-item-row:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+
+<nav class="sidebar d-flex flex-column" id="sidebar">
+    <a href="#" class="brand px-2">
+        <i class="bi bi-hexagon-fill text-success me-2"></i>NSBM <span class="text-warning">EATS</span>
+    </a>
+    
+    <ul class="nav flex-column mb-auto">
+        <li class="nav-item">
+            <a class="nav-link active" href="stall_dashboard.html"><i class="bi bi-grid-1x2 me-2"></i> Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="stall_orders.html"><i class="bi bi-receipt me-2"></i> Orders <span class="badge bg-danger ms-auto rounded-pill">3</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="manage_menu.html"><i class="bi bi-collection me-2"></i> Manage Menu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="settings.html"><i class="bi bi-gear me-2"></i> Settings</a>
+        </li>
+    </ul>
+    
+    <div class="mt-auto">
+        <a href="stall_login.html" class="nav-link text-danger"><i class="bi bi-box-arrow-left me-2"></i> Sign Out</a>
     </div>
 </nav>
 
-<div class="container mt-4">
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item">
-            <button class="nav-link active" id="pills-orders-tab" data-bs-toggle="pill" data-bs-target="#pills-orders" type="button">Incoming Orders</button>
-        </li>
-        <li class="nav-item">
-            <button class="nav-link" id="pills-menu-tab" data-bs-toggle="pill" data-bs-target="#pills-menu" type="button">Manage Menu</button>
-        </li>
-    </ul>
 
-    <div class="tab-content" id="pills-tabContent">
-        
-        <div class="tab-pane fade show active" id="pills-orders">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white fw-bold">Current Orders</div>
-                <div class="card-body">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr><th>Order #</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Action</th></tr>
-                        </thead>
-                        <tbody id="ordersTable">
-                            </tbody>
-                    </table>
+<div class="main-content">
+    
+    <button class="btn btn-dark d-md-none mb-3" onclick="document.getElementById('sidebar').classList.toggle('show')">
+        <i class="bi bi-list"></i> Menu
+    </button>
+
+    <div class="row mb-4 align-items-center">
+        <div class="col">
+            <h2 class="fw-bold text-dark mb-1">Good Morning, Tasty Foods! 👋</h2>
+            <p class="text-secondary mb-0">Here is what's happening in your stall today.</p>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-dark rounded-pill px-3 shadow-sm bg-white">
+                <i class="bi bi-calendar3 me-2"></i> <span id="currentDate">Jan 24, 2025</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="text-muted small fw-bold mb-1 text-uppercase">Total Revenue</p>
+                        <h3 class="fw-bold text-dark mb-0">LKR 24,500</h3>
+                    </div>
+                    <div class="icon-box bg-success bg-opacity-10 text-success">
+                        <i class="bi bi-cash-stack"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="badge bg-success bg-opacity-10 text-success"><i class="bi bi-arrow-up-short"></i> +12%</span>
+                    <span class="text-muted small ms-1">vs yesterday</span>
                 </div>
             </div>
         </div>
 
-        <div class="tab-pane fade" id="pills-menu">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card shadow-sm mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">Add Menu Item</h5>
-                            <form id="addMenuForm">
-                                <div class="mb-2">
-                                    <input type="text" class="form-control" id="itemName" placeholder="Item Name (e.g. Chicken Rice)" required>
-                                </div>
-                                <div class="mb-2">
-                                    <input type="number" class="form-control" id="itemPrice" placeholder="Price (LKR)" required>
-                                </div>
-                                <div class="mb-2">
-                                    <select class="form-select" id="itemCategory">
-                                        <option value="Main Dish">Main Dish</option>
-                                        <option value="Short Eats">Short Eats</option>
-                                        <option value="Drinks">Drinks</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-success w-100">Add to Menu</button>
-                            </form>
-                        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="text-muted small fw-bold mb-1 text-uppercase">Total Orders</p>
+                        <h3 class="fw-bold text-dark mb-0">45</h3>
+                    </div>
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary">
+                        <i class="bi bi-bag-check-fill"></i>
                     </div>
                 </div>
-                
-                <div class="col-md-8">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5>My Menu Items</h5>
-                            <ul class="list-group" id="menuList">
-                                </ul>
-                        </div>
+                <div class="mt-3">
+                    <span class="badge bg-danger bg-opacity-10 text-danger"><i class="bi bi-arrow-down-short"></i> -5%</span>
+                    <span class="text-muted small ms-1">vs yesterday</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="text-muted small fw-bold mb-1 text-uppercase">Pending Orders</p>
+                        <h3 class="fw-bold text-dark mb-0">3</h3>
                     </div>
+                    <div class="icon-box bg-warning bg-opacity-10 text-warning">
+                        <i class="bi bi-hourglass-split"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="kitchen_display.html" class="small text-decoration-none fw-bold text-warning">Go to Kitchen View &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="text-muted small fw-bold mb-1 text-uppercase">Avg. Rating</p>
+                        <h3 class="fw-bold text-dark mb-0">4.8</h3>
+                    </div>
+                    <div class="icon-box bg-info bg-opacity-10 text-info">
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <span class="text-warning">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </span>
+                    <span class="text-muted small ms-1">(120 reviews)</span>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row g-4">
+        
+        <div class="col-lg-8">
+            <div class="chart-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold m-0">Hourly Sales (Today)</h5>
+                    <select class="form-select form-select-sm w-auto bg-light border-0">
+                        <option>Today</option>
+                        <option>Last 7 Days</option>
+                    </select>
+                </div>
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="stat-card">
+                <h5 class="fw-bold mb-4">🔥 Top Selling Items</h5>
+                
+                <div class="top-item-row d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light rounded p-2 me-3"><i class="bi bi-egg-fried fs-4"></i></div>
+                        <div>
+                            <h6 class="fw-bold m-0 text-dark">Chicken Fried Rice</h6>
+                            <small class="text-muted">24 sold</small>
+                        </div>
+                    </div>
+                    <span class="fw-bold text-success">+ LKR 15k</span>
+                </div>
+
+                <div class="top-item-row d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light rounded p-2 me-3"><i class="bi bi-cup-straw fs-4"></i></div>
+                        <div>
+                            <h6 class="fw-bold m-0 text-dark">Iced Milo</h6>
+                            <small class="text-muted">18 sold</small>
+                        </div>
+                    </div>
+                    <span class="fw-bold text-success">+ LKR 2.7k</span>
+                </div>
+
+                <div class="top-item-row d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light rounded p-2 me-3"><i class="bi bi-circle fs-4"></i></div>
+                        <div>
+                            <h6 class="fw-bold m-0 text-dark">Fish Bun</h6>
+                            <small class="text-muted">12 sold</small>
+                        </div>
+                    </div>
+                    <span class="fw-bold text-success">+ LKR 1.2k</span>
+                </div>
+
+                <button class="btn btn-light w-100 mt-3 text-primary fw-bold btn-sm">View Full Report</button>
+            </div>
+        </div>
+
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-    // 1. Check Login
-    const stallId = sessionStorage.getItem('loggedStallId');
-    if(!stallId) window.location.href = 'stall_login.html';
-    document.getElementById('stallNameDisplay').innerText = sessionStorage.getItem('loggedStallName');
+    // 1. Set Date
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', options);
 
-    // 2. Add Menu Item
-    document.getElementById('addMenuForm').addEventListener('submit', function(e){
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('stall_id', stallId);
-        formData.append('name', document.getElementById('itemName').value);
-        formData.append('price', document.getElementById('itemPrice').value);
-        formData.append('category', document.getElementById('itemCategory').value);
+    // 2. Render Chart using Chart.js
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    
+    // Gradient for the chart line
+    let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(13, 110, 253, 0.3)'); // Blue transparent top
+    gradient.addColorStop(1, 'rgba(13, 110, 253, 0.0)'); // Transparent bottom
 
-        fetch('../../Backend/stallController/add_menu_item.php', { method: 'POST', body: formData })
-        .then(res => res.json())
-        .then(data => {
-            alert(data.message);
-            loadMenu(); // Refresh list
-            document.getElementById('addMenuForm').reset();
-        });
+    const myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM'],
+            datasets: [{
+                label: 'Sales (LKR)',
+                data: [5000, 8500, 12000, 24500, 18000, 15000, 9000],
+                backgroundColor: gradient,
+                borderColor: '#0d6efd',
+                borderWidth: 3,
+                pointBackgroundColor: '#ffffff',
+                pointBorderColor: '#0d6efd',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                fill: true,
+                tension: 0.4 // Makes the line curved (smooth)
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f3f4f6' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
     });
-
-    // 3. Load Menu Items
-    function loadMenu() {
-        fetch(`../../Backend/stallController/get_menu_items.php?stall_id=${stallId}`)
-        .then(res => res.json())
-        .then(data => {
-            const list = document.getElementById('menuList');
-            list.innerHTML = '';
-            data.forEach(item => {
-                list.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center">
-                    ${item.item_name} <span class="badge bg-secondary">${item.category}</span> 
-                    <span class="fw-bold">LKR ${item.price}</span>
-                </li>`;
-            });
-        });
-    }
-
-    // 4. Load Orders
-    function loadOrders() {
-        fetch(`../../Backend/stallController/get_orders.php?stall_id=${stallId}`)
-        .then(res => res.json())
-        .then(data => {
-            const tbody = document.getElementById('ordersTable');
-            tbody.innerHTML = '';
-            data.forEach(order => {
-                tbody.innerHTML += `<tr>
-                    <td>#${order.id}</td>
-                    <td>${order.customer_name}</td>
-                    <td>${order.items_json}</td>
-                    <td>LKR ${order.total_price}</td>
-                    <td><span class="badge bg-warning text-dark">${order.status}</span></td>
-                    <td><button class="btn btn-sm btn-success">Mark Ready</button></td>
-                </tr>`;
-            });
-        });
-    }
-
-    // Initial Load
-    loadMenu();
-    loadOrders();
-    // Refresh orders every 10 seconds automatically
-    setInterval(loadOrders, 10000);
-
-    function logout() {
-        sessionStorage.clear();
-        window.location.href = 'stall_login.html';
-    }
 </script>
+
 </body>
 </html>

@@ -1,4 +1,6 @@
 <?php
+// fetch_stalls.php
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 include '../DBMSConector/db_connect.php';
 

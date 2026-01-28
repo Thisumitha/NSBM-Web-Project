@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSBM EATS - Live Kitchen</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --bg-color: #f3f4f6;
+            --card-radius: 12px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            overflow-x: hidden;
+        }
+
+        /* --- Sidebar (Matches Previous Page) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #1e293b; /* Slate Dark */
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        .sidebar .nav-link {
+            color: #94a3b8;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .sidebar .brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            display: block;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+        }
+
+        /* --- Kanban Board Styling --- */
+        .kanban-col {
+            background: #e2e8f0;
+            border-radius: 16px;
+            padding: 1rem;
+            min-height: 80vh;
+        }
+
+        .kanban-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 0 5px;
+        }
+
+        /* Order Ticket Styling */
+        .order-card {
+            background: white;
+            border: none;
+            border-radius: var(--card-radius);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Colored Stripe on left of card */
+        .order-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+        }
+
+        .status-pending::before { background-color: #f59e0b; } /* Amber */
+        .status-preparing::before { background-color: #3b82f6; } /* Blue */
+        .status-ready::before { background-color: #10b981; } /* Green */
+
+        .order-items {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="sidebar d-flex flex-column" id="sidebar">
+    <a href="#" class="brand px-2">
+        <i class="bi bi-hexagon-fill text-success me-2"></i>NSBM <span class="text-warning">EATS</span>
+    </a>
+    
+    <ul class="nav flex-column mb-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="stall_dashboard.html"><i class="bi bi-grid-1x2 me-2"></i> Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="stall_orders.html"><i class="bi bi-receipt me-2"></i> Orders <span class="badge bg-danger ms-auto rounded-pill">3</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " href="manage_menu.html"><i class="bi bi-collection me-2"></i> Manage Menu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="settings.html"><i class="bi bi-gear me-2"></i> Settings</a>
+        </li>
+    </ul>
+    
+    <div class="mt-auto">
+        <a class="nav-link" href="stall_login.html" class="nav-link text-danger"><i class="bi bi-box-arrow-left me-2"></i> Sign Out</a>
+    </div>
+</nav>
+
+
+<div class="main-content">
+
+    <button class="btn btn-dark d-md-none mb-3" onclick="document.getElementById('sidebar').classList.toggle('show')">
+        <i class="bi bi-list"></i> Menu
+    </button>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Kitchen Display</h2>
+            <p class="text-secondary mb-0">Manage incoming orders in real-time.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <span class="badge bg-white text-dark border p-2 d-flex align-items-center">
+                <i class="bi bi-clock me-2 text-primary"></i> <span id="clock">12:00 PM</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        
+        <div class="col-lg-4">
+            <div class="kanban-header">
+                <h5 class="fw-bold m-0 text-secondary"><i class="bi bi-bell-fill text-warning me-2"></i>New Orders</h5>
+                <span class="badge bg-secondary rounded-pill" id="count-pending">0</span>
+            </div>
+            <div class="kanban-col" id="col-pending">
+                </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="kanban-header">
+                <h5 class="fw-bold m-0 text-secondary"><i class="bi bi-fire text-primary me-2"></i>Cooking</h5>
+                <span class="badge bg-secondary rounded-pill" id="count-preparing">0</span>
+            </div>
+            <div class="kanban-col" id="col-preparing">
+                </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="kanban-header">
+                <h5 class="fw-bold m-0 text-secondary"><i class="bi bi-check-circle-fill text-success me-2"></i>Ready for Pickup</h5>
+                <span class="badge bg-secondary rounded-pill" id="count-ready">0</span>
+            </div>
+            <div class="kanban-col" id="col-ready">
+                </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- CLOCK LOGIC ---
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }, 1000);
+
+    // --- MOCK DATA ---
+    let orders = [
+        { id: 101, customer: "Amal Perera", items: "1x Chicken Fried Rice\n1x Cola (300ml)", total: 950, status: "pending", time: "12:05 PM" },
+        { id: 102, customer: "Kamal Silva", items: "2x Fish Bun\n1x Iced Coffee", total: 450, status: "preparing", time: "12:10 PM" },
+        { id: 103, customer: "Nimali D.", items: "1x Veg Kottu", total: 600, status: "ready", time: "11:55 AM" }
+    ];
+
+    function renderOrders() {
+        const cols = {
+            pending: document.getElementById('col-pending'),
+            preparing: document.getElementById('col-preparing'),
+            ready: document.getElementById('col-ready')
+        };
+        
+        // Reset HTML
+        Object.values(cols).forEach(col => col.innerHTML = '');
+
+        // Counters
+        let counts = { pending: 0, preparing: 0, ready: 0 };
+
+        orders.forEach(order => {
+            counts[order.status]++;
+            
+            // Define Buttons based on status
+            let actionBtn = '';
+            if(order.status === 'pending') {
+                actionBtn = `<button class="btn btn-primary w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'preparing')">
+                                <i class="bi bi-fire me-2"></i>Start Cooking
+                             </button>`;
+            } else if(order.status === 'preparing') {
+                actionBtn = `<button class="btn btn-success w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'ready')">
+                                <i class="bi bi-check-lg me-2"></i>Mark Ready
+                             </button>`;
+            } else if(order.status === 'ready') {
+                actionBtn = `<button class="btn btn-outline-secondary w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'completed')">
+                                <i class="bi bi-bag-check me-2"></i>Complete Order
+                             </button>`;
+            }
+
+            // Create Card HTML
+            const card = `
+            <div class="card order-card status-${order.status} p-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-dark rounded-pill">#${order.id}</span>
+                    <span class="text-secondary small fw-bold"><i class="bi bi-clock me-1"></i>${order.time}</span>
+                </div>
+                
+                <h6 class="fw-bold text-dark mb-2">${order.customer}</h6>
+                
+                <div class="order-items">
+                    ${order.items.replace(/\n/g, '<br>')}
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted small">Total</span>
+                    <span class="fw-bold text-dark fs-5">LKR ${order.total}</span>
+                </div>
+                
+                ${actionBtn}
+            </div>`;
+            
+            if(cols[order.status]) cols[order.status].innerHTML += card;
+        });
+
+        // Update Counters
+        document.getElementById('count-pending').innerText = counts.pending;
+        document.getElementById('count-preparing').innerText = counts.preparing;
+        document.getElementById('count-ready').innerText = counts.ready;
+        document.getElementById('sidebarCount').innerText = orders.length;
+    }
+
+    function updateStatus(id, status) {
+        const idx = orders.findIndex(o => o.id === id);
+        if (idx === -1) return;
+
+        if(status === 'completed') {
+            if(confirm("Complete this order? It will be removed from the board.")) {
+                orders.splice(idx, 1);
+            }
+        } else {
+            orders[idx].status = status;
+        }
+        renderOrders();
+    }
+
+    // Initial Load
+    renderOrders();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
