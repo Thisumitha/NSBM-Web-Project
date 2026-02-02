@@ -1,17 +1,53 @@
 <?php
-include '../DBMSConector/db_connect.php'; // Reuse your existing connection file
+// Backend/stallController/stall_login_check.php
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
 
-$username = $_POST['username'];
-$password = $_POST['password'];
+// Disable error reporting display to prevent HTML errors breaking JSON
+error_reporting(0); 
+ini_set('display_errors', 0);
 
-$sql = "SELECT * FROM stalls WHERE username='$username' AND password='$password'";
-$result = $conn->query($sql);
+include '../DBMSConector/db_connect.php';
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    echo json_encode(["status" => "success", "stall_id" => $row['id'], "stall_name" => $row['name']]);
+$response = array();
+
+// Check if request is POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // Prepare SQL to prevent SQL Injection
+    $stmt = $conn->prepare("SELECT id, name, password FROM stalls WHERE username = ?");
+    if($stmt) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            // Check Password (Plain text comparison as per your setup)
+            if ($password === $row['password']) {
+                $response['status'] = 'success';
+                $response['stall_id'] = $row['id'];
+                $response['stall_name'] = $row['name'];
+            } else {
+                $response['status'] = 'error';
+                $response['message'] = 'Invalid Password';
+            }
+        } else {
+            $response['status'] = 'error';
+            $response['message'] = 'User not found';
+        }
+        $stmt->close();
+    } else {
+        $response['status'] = 'error';
+        $response['message'] = 'Database query failed';
+    }
 } else {
-    echo json_encode(["status" => "error", "message" => "Invalid credentials"]);
+    $response['status'] = 'error';
+    $response['message'] = 'Invalid Request Method';
 }
+
+echo json_encode($response);
 $conn->close();
 ?>

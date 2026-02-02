@@ -21,7 +21,7 @@
             overflow-x: hidden;
         }
 
-        /* --- Sidebar (Matches Previous Page) --- */
+        /* --- Sidebar --- */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -103,7 +103,6 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        /* Colored Stripe on left of card */
         .order-card::before {
             content: '';
             position: absolute;
@@ -151,7 +150,7 @@
     </ul>
     
     <div class="mt-auto">
-        <a class="nav-link" href="stall_login.html" class="nav-link text-danger"><i class="bi bi-box-arrow-left me-2"></i> Sign Out</a>
+        <a href="#" onclick="logout()" class="nav-link text-danger"><i class="bi bi-box-arrow-left me-2"></i> Sign Out</a>
     </div>
 </nav>
 
@@ -207,99 +206,162 @@
 </div>
 
 <script>
-    // --- CLOCK LOGIC ---
+    // --- 1. GET ID FROM LOCAL STORAGE (UPDATED) ---
+    const MY_STALL_ID = localStorage.getItem('stall_id');
+
+    // If no ID is found, kick them back to login
+    if (!MY_STALL_ID) {
+        alert("You are not logged in!");
+        window.location.href = 'stall_login.html';
+    }
+
+    function logout() {
+        localStorage.removeItem('stall_id');
+        localStorage.removeItem('stall_name');
+        window.location.href = 'stall_login.html';
+    }
+
+    // --- CONFIGURATION ---
+    const API_GET = '../../Backend/stallController/get_live_orders.php';
+    const API_UPDATE = '../../Backend/stallController/update_order_status.php';
+
+    // --- CLOCK ---
     setInterval(() => {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }, 1000);
 
-    // --- MOCK DATA ---
-    let orders = [
-        { id: 101, customer: "Amal Perera", items: "1x Chicken Fried Rice\n1x Cola (300ml)", total: 950, status: "pending", time: "12:05 PM" },
-        { id: 102, customer: "Kamal Silva", items: "2x Fish Bun\n1x Iced Coffee", total: 450, status: "preparing", time: "12:10 PM" },
-        { id: 103, customer: "Nimali D.", items: "1x Veg Kottu", total: 600, status: "ready", time: "11:55 AM" }
-    ];
+    // --- MAIN LOGIC ---
+    document.addEventListener('DOMContentLoaded', () => {
+        loadOrders();
+        setInterval(loadOrders, 5000); // Poll every 5 seconds
+    });
 
-    function renderOrders() {
-        const cols = {
-            pending: document.getElementById('col-pending'),
-            preparing: document.getElementById('col-preparing'),
-            ready: document.getElementById('col-ready')
-        };
-        
-        // Reset HTML
-        Object.values(cols).forEach(col => col.innerHTML = '');
+    async function loadOrders() {
+        try {
+            const response = await fetch(`${API_GET}?stall_id=${MY_STALL_ID}`);
+            const rawData = await response.json();
+            processAndRender(rawData);
+        } catch (error) {
+            console.error("Connection error:", error);
+        }
+    }
 
-        // Counters
-        let counts = { pending: 0, preparing: 0, ready: 0 };
+    function processAndRender(data) {
+        // 1. Group raw items by Order ID
+        const groupedOrders = {};
 
-        orders.forEach(order => {
-            counts[order.status]++;
-            
-            // Define Buttons based on status
-            let actionBtn = '';
-            if(order.status === 'pending') {
-                actionBtn = `<button class="btn btn-primary w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'preparing')">
-                                <i class="bi bi-fire me-2"></i>Start Cooking
-                             </button>`;
-            } else if(order.status === 'preparing') {
-                actionBtn = `<button class="btn btn-success w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'ready')">
-                                <i class="bi bi-check-lg me-2"></i>Mark Ready
-                             </button>`;
-            } else if(order.status === 'ready') {
-                actionBtn = `<button class="btn btn-outline-secondary w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'completed')">
-                                <i class="bi bi-bag-check me-2"></i>Complete Order
-                             </button>`;
+        data.forEach(row => {
+            if (!groupedOrders[row.order_id]) {
+                groupedOrders[row.order_id] = {
+                    id: row.order_id,
+                    customer: `Table ${row.table_id}`, 
+                    time: row.order_time,
+                    total: 0,
+                    status: row.item_status, 
+                    itemsList: []
+                };
             }
-
-            // Create Card HTML
-            const card = `
-            <div class="card order-card status-${order.status} p-3">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="badge bg-dark rounded-pill">#${order.id}</span>
-                    <span class="text-secondary small fw-bold"><i class="bi bi-clock me-1"></i>${order.time}</span>
-                </div>
-                
-                <h6 class="fw-bold text-dark mb-2">${order.customer}</h6>
-                
-                <div class="order-items">
-                    ${order.items.replace(/\n/g, '<br>')}
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted small">Total</span>
-                    <span class="fw-bold text-dark fs-5">LKR ${order.total}</span>
-                </div>
-                
-                ${actionBtn}
-            </div>`;
             
-            if(cols[order.status]) cols[order.status].innerHTML += card;
+            groupedOrders[row.order_id].itemsList.push(`${row.quantity}x ${row.item_name}`);
+            groupedOrders[row.order_id].total += (parseFloat(row.price) * parseInt(row.quantity));
         });
 
-        // Update Counters
-        document.getElementById('count-pending').innerText = counts.pending;
-        document.getElementById('count-preparing').innerText = counts.preparing;
-        document.getElementById('count-ready').innerText = counts.ready;
-        document.getElementById('sidebarCount').innerText = orders.length;
-    }
+        // 2. Clear Columns
+        const cols = {
+            'Pending': document.getElementById('col-pending'),
+            'Cooking': document.getElementById('col-preparing'),
+            'Ready': document.getElementById('col-ready')
+        };
+        
+        Object.values(cols).forEach(col => col.innerHTML = '');
+        
+        let counts = { Pending: 0, Cooking: 0, Ready: 0 };
 
-    function updateStatus(id, status) {
-        const idx = orders.findIndex(o => o.id === id);
-        if (idx === -1) return;
+        // 3. Generate HTML
+        Object.values(groupedOrders).forEach(order => {
+            
+            let targetCol = cols[order.status];
+            if(order.status === 'Cooking') targetCol = cols['Cooking'];
 
-        if(status === 'completed') {
-            if(confirm("Complete this order? It will be removed from the board.")) {
-                orders.splice(idx, 1);
+            if (targetCol) {
+                counts[order.status]++;
+                
+                const itemsHtml = order.itemsList.join('<br>');
+
+                // Determine Button
+                let actionBtn = '';
+                if(order.status === 'Pending') {
+                    actionBtn = `<button class="btn btn-primary w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'Cooking')">
+                                    <i class="bi bi-fire me-2"></i>Start Cooking
+                                 </button>`;
+                } else if(order.status === 'Cooking') {
+                    actionBtn = `<button class="btn btn-success w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'Ready')">
+                                    <i class="bi bi-check-lg me-2"></i>Mark Ready
+                                 </button>`;
+                } else if(order.status === 'Ready') {
+                    actionBtn = `<button class="btn btn-outline-secondary w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'completed')">
+                                    <i class="bi bi-bag-check me-2"></i>Complete Order
+                                 </button>`;
+                }
+
+                const card = `
+                <div class="card order-card status-${order.status.toLowerCase()} p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-dark rounded-pill">#${order.id}</span>
+                        <span class="text-secondary small fw-bold"><i class="bi bi-clock me-1"></i>${order.time}</span>
+                    </div>
+                    
+                    <h6 class="fw-bold text-dark mb-2">${order.customer}</h6>
+                    
+                    <div class="order-items">
+                        ${itemsHtml}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted small">Total</span>
+                        <span class="fw-bold text-dark fs-5">LKR ${order.total}</span>
+                    </div>
+                    
+                    ${actionBtn}
+                </div>`;
+
+                targetCol.innerHTML += card;
             }
-        } else {
-            orders[idx].status = status;
-        }
-        renderOrders();
+        });
+
+        // 4. Update Header Badges
+        document.getElementById('count-pending').innerText = counts.Pending || 0;
+        document.getElementById('count-preparing').innerText = counts.Cooking || 0;
+        document.getElementById('count-ready').innerText = counts.Ready || 0;
     }
 
-    // Initial Load
-    renderOrders();
+    async function updateStatus(orderId, newStatus) {
+        if(newStatus === 'completed') {
+            if(!confirm("Are you sure this order is picked up?")) return;
+        }
+
+        try {
+            const response = await fetch(API_UPDATE, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    order_id: orderId,
+                    stall_id: MY_STALL_ID,
+                    status: newStatus
+                })
+            });
+            
+            const result = await response.json();
+            if(result.success) {
+                loadOrders(); 
+            } else {
+                alert("Error updating status");
+            }
+        } catch (error) {
+            console.error("Update failed", error);
+        }
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

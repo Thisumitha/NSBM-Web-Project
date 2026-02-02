@@ -41,13 +41,19 @@
         .then(res => res.json())
         .then(data => {
             if(data.status === 'success') {
-                // Save the Stall ID so we know WHICH restaurant is logged in
-                sessionStorage.setItem('loggedStallId', data.stall_id);
-                sessionStorage.setItem('loggedStallName', data.stall_name);
+                // --- UPDATE: Save to localStorage ---
+                localStorage.setItem('stall_id', data.stall_id);
+                localStorage.setItem('stall_name', data.stall_name);
+                
+                // Redirect
                 window.location.href = 'stall_dashboard.html';
             } else {
                 document.getElementById('errorMsg').innerText = data.message;
             }
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('errorMsg').innerText = "Connection Error";
         });
     });
 </script>
