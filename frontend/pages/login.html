@@ -6,48 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NSBM Edge - Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/login.css">
     
     <style>
+        /* Optional: Small override to match NSBM green more closely than standard Bootstrap green if desired. 
+           Otherwise, you can rely purely on 'text-success' and 'btn-success'. */
         body {
-            background-color: #f8f9fa;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-        }
-        .login-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .nsbm-green {
-            color: #27ae60;
-            font-weight: bold;
-        }
-        .btn-nsbm {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-        }
-        .btn-nsbm:hover {
-            background-color: #219150;
-            color: white;
+            background-color: #f8f9fa; /* Light gray background */
         }
     </style>
 </head>
 
-<body>
+<body class="d-flex align-items-center min-vh-100">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-5 col-lg-4">
-                <div class="card login-card p-4">
-                    <div class="card-body">
+                
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4 p-sm-5">
+                        
                         <div class="text-center mb-4">
-                            <h2 class="fw-bold">NSBM <span class="nsbm-green">EDGE</span></h2>
-                            <p class="text-muted">Sign in to your account</p>
+                            <h2 class="fw-bold">NSBM <span class="text-success">EDGE</span></h2>
+                            <p class="text-secondary small">Sign in to your account</p>
                         </div>
 
                         <form action="../../Backend/login/login.php" method="POST">
+                            
                             <div class="form-floating mb-3">
                                 <input type="text" name="username" class="form-control" id="username" placeholder="Student ID" required>
                                 <label for="username">Student ID / Email</label>
@@ -58,14 +41,12 @@
                                 <label for="password">Password</label>
                             </div>
 
-                            <button type="submit" class="btn btn-nsbm w-100 py-2 fw-bold shadow-sm">Login</button>
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow-sm rounded-3">Login</button>
                             
-                            <div class="text-center mt-3">
-                                <a href="#" class="text-decoration-none small text-secondary">Forgot password?</a>
-                            </div>
                         </form>
                     </div>
                 </div>
+
                 <p class="text-center mt-4 small text-muted">&copy; 2026 NSBM Green University</p>
             </div>
         </div>

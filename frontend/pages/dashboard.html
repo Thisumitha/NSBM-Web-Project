@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+<<<<<<< HEAD
 
     <style>
         :root {
@@ -508,6 +509,209 @@
         document.addEventListener('DOMContentLoaded', loadStalls);
 
     </script>
+=======
+
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body class="bg-light">
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-lg-2 bg-dark min-vh-100 d-none d-lg-block text-white p-3 fixed-top"
+                style="max-width: 280px; z-index: 1000;">
+                <a href="#" class="d-flex align-items-center mb-4 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <div class="bg-success rounded-circle p-2 me-2 d-flex justify-content-center align-items-center"
+                        style="width: 32px; height: 32px;">
+                        <i class="bi bi-mortarboard-fill text-white" style="font-size: 0.9rem;"></i>
+                    </div>
+                    <span class="fs-5 fw-bold">NSBM Admin</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link active bg-success text-white" aria-current="page">
+                            <i class="bi bi-grid-1x2 me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin_tables.html" class="nav-link text-white-50 hover-light">
+                            <i class="bi bi-shop me-2"></i> Outlets & Stalls
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <div>
+                    <a href="login.html" class="nav-link text-danger">
+                        <i class="bi bi-box-arrow-left me-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+
+            <nav class="navbar navbar-dark bg-dark d-lg-none fixed-top p-3">
+                <div class="container-fluid">
+                    <span class="navbar-brand fw-bold">NSBM Admin</span>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#mobileSidebar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="mobileSidebar">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title fw-bold">NSBM Admin</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="dashboard.html" class="nav-link active bg-success text-white">
+                                <i class="bi bi-grid-1x2 me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="admin_tables.html" class="nav-link text-white-50">
+                                <i class="bi bi-shop me-2"></i> Outlets & Stalls
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <a href="login.html" class="nav-link text-danger mt-3">
+                        <i class="bi bi-box-arrow-left me-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+
+            <main class="col-lg-10 offset-lg-2 ms-auto p-4 mt-5 mt-lg-0">
+
+                <div
+                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-4 border-bottom pt-3">
+                    <div>
+                        <h2 class="h3 fw-bold">Dashboard Overview</h2>
+                        <p class="text-secondary">Manage your food court operations.</p>
+                    </div>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill bg-white shadow-sm"
+                            onclick="loadStalls()">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Refresh Data
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+
+                    <div class="col-lg-4">
+                        <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div class="card-header bg-white border-bottom-0 pt-4 px-4 pb-0">
+                                <h6 class="fw-bold m-0 text-dark"><i class="bi bi-plus-circle me-2"></i>Register Outlet
+                                </h6>
+                            </div>
+                            <div class="card-body p-4">
+                                <form id="addStallForm">
+
+                                    <div class="mb-4">
+                                        <label class="form-label small fw-bold text-secondary">Outlet Logo</label>
+                                        <div class="border border-2 border-dashed rounded-3 p-4 text-center bg-light cursor-pointer hover-shadow"
+                                            style="cursor: pointer;"
+                                            onclick="document.getElementById('stallImage').click()">
+                                            <i class="bi bi-cloud-arrow-up fs-2 text-secondary" id="uploadIcon"></i>
+                                            <p class="small text-muted mb-0 mt-2 fw-bold" id="uploadText">Click to
+                                                upload image</p>
+                                            <input type="file" id="stallImage" name="image" hidden accept="image/*"
+                                                onchange="previewFile()">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold text-secondary">Stall Name</label>
+                                        <input type="text" class="form-control" name="name" id="stallName" required
+                                            placeholder="e.g. Spicy Wok">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold text-secondary">Owner Name</label>
+                                        <input type="text" class="form-control" name="owner" id="stallOwner" required
+                                            placeholder="e.g. Mr. Perera">
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6 mb-3">
+                                            <label class="form-label small fw-bold text-secondary">Username</label>
+                                            <input type="text" class="form-control" name="username" required
+                                                placeholder="Login ID">
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label class="form-label small fw-bold text-secondary">Password</label>
+                                            <input type="password" class="form-control" name="password" required
+                                                placeholder="••••••">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6 mb-3">
+                                            <label class="form-label small fw-bold text-secondary">Category</label>
+                                            <select class="form-select" name="category" id="stallCategory">
+                                                <option value="Main">Main Dish</option>
+                                                <option value="Snack">Short Eats</option>
+                                                <option value="Beverage">Beverage</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label class="form-label small fw-bold text-secondary">Status</label>
+                                            <select class="form-select" name="status" id="stallStatus">
+                                                <option value="Open">Open</option>
+                                                <option value="Closed">Closed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit"
+                                        class="btn btn-dark w-100 py-2 rounded-3 fw-bold mt-2 shadow-sm">
+                                        Create Outlet
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm rounded-4 h-100">
+                            <div
+                                class="card-header bg-white pt-4 px-4 pb-3 border-bottom d-flex justify-content-between align-items-center">
+                                <h6 class="fw-bold m-0 text-dark">Active Canteen Outlets</h6>
+                                <span class="badge bg-light text-secondary border rounded-pill px-3 py-2"
+                                    id="totalCount">0 Total</span>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th class="text-uppercase text-secondary small fw-bold ps-4 py-3">Outlet
+                                                Info</th>
+                                            <th class="text-uppercase text-secondary small fw-bold py-3">Category</th>
+                                            <th class="text-uppercase text-secondary small fw-bold py-3">Owner</th>
+                                            <th class="text-uppercase text-secondary small fw-bold py-3">Status</th>
+                                            <th class="text-end text-uppercase text-secondary small fw-bold pe-4 py-3">
+                                                Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="stallTableBody" class="border-top-0">
+                                        <tr>
+                                            <td colspan="5" class="text-center py-5 text-muted">Loading data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="../js/dashboard.js"></script>
+>>>>>>> 863df1b77f3ee71611df008e92a4bddfa746ee4c
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
