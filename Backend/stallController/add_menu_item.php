@@ -34,18 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category = $_POST['category'] ?? 'Main';
 
     // Default image if none uploaded
-    $final_image_path = "https://via.placeholder.com/150";
+    $final_image_path = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1 1'%3E%3Crect fill='%23cccccc' width='1' height='1'/%3E%3C/svg%3E";
 
     // --- Handle Image Upload ---
     // Make sure this matches the folder structure you used in add_stall.php
-    $upload_dir = "../uploads/"; 
+    $upload_dir = "../uploads/";
 
     // Create directory if missing
     if (!is_dir($upload_dir)) {
         mkdir($upload_dir, 0777, true);
     }
 
-    if(isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+    if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
         $file_extension = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
         $new_filename = "menu_" . time() . "_" . uniqid() . "." . $file_extension;
         $target_file = $upload_dir . $new_filename;
@@ -53,21 +53,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
             // Success: Update the path variable to the new file
             // Storing as "uploads/filename.jpg" for frontend compatibility
-            $final_image_path = "uploads/" . $new_filename; 
+            $final_image_path = "uploads/" . $new_filename;
         }
     }
 
     // --- STEP 3: Insert into Database ---
     // Using Prepared Statements for security
     $stmt = $conn->prepare("INSERT INTO menu_items (stall_id, item_name, price, category, image_url) VALUES (?, ?, ?, ?, ?)");
-    
+
     if ($stmt) {
         // i = integer, s = string, d = double/decimal
         $stmt->bind_param("isdss", $stall_id, $name, $price, $category, $final_image_path);
 
         if ($stmt->execute()) {
             echo json_encode([
-                "status" => "success", 
+                "status" => "success",
                 "message" => "Item added successfully",
                 "image_url" => $final_image_path
             ]);

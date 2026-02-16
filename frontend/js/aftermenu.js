@@ -67,7 +67,7 @@ function loadFoods(category) {
         card.className = "food-card";
 
         card.innerHTML = `
-            <img src="${food.img}">
+            <img class src="${food.img}">
             <h3>${food.name}</h3>
             <p>Rs. ${food.price}</p>
             <button>Order</button>

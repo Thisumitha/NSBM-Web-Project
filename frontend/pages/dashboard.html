@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NSBM Admin - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
-            --primary-color: #059669; /* Emerald Green */
-            --dark-sidebar: #0f172a;  /* Slate 900 */
-            --bg-body: #f1f5f9;       /* Slate 100 */
+            --primary-color: #059669;
+            /* Emerald Green */
+            --dark-sidebar: #0f172a;
+            /* Slate 900 */
+            --bg-body: #f1f5f9;
+            /* Slate 100 */
             --text-main: #334155;
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
@@ -50,7 +55,8 @@
         .nav-link {
             display: flex;
             align-items: center;
-            color: #94a3b8; /* Slate 400 */
+            color: #94a3b8;
+            /* Slate 400 */
             padding: 12px 16px;
             border-radius: 10px;
             margin-bottom: 4px;
@@ -59,12 +65,16 @@
             text-decoration: none;
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover,
+        .nav-link.active {
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
         }
 
-        .nav-link i { font-size: 1.1rem; margin-right: 12px; }
+        .nav-link i {
+            font-size: 1.1rem;
+            margin-right: 12px;
+        }
 
         /* --- Main Content --- */
         .main-content {
@@ -73,9 +83,17 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.show { transform: translateX(0); }
-            .main-content { margin-left: 0; }
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
         }
 
         /* --- Cards & UI --- */
@@ -106,7 +124,11 @@
             transition: all 0.2s;
             background: #f8fafc;
         }
-        .upload-area:hover { border-color: var(--primary-color); background: #f0fdf4; }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: #f0fdf4;
+        }
 
         /* Table Styling */
         .table thead th {
@@ -118,7 +140,7 @@
             border-bottom: 1px solid #e2e8f0;
             padding: 12px 24px;
         }
-        
+
         .table tbody td {
             padding: 16px 24px;
             vertical-align: middle;
@@ -126,198 +148,230 @@
         }
 
         /* Status Badges */
-        .badge-soft { padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.75rem; }
-        .badge-soft-success { background-color: #dcfce7; color: #166534; }
-        .badge-soft-danger  { background-color: #fee2e2; color: #991b1b; }
-        
+        .badge-soft {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+        }
+
+        .badge-soft-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-soft-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
         .stall-logo {
-            width: 40px; 
-            height: 40px; 
+            width: 40px;
+            height: 40px;
             object-fit: cover;
             border-radius: 8px;
         }
     </style>
 </head>
+
 <body>
 
-<nav class="sidebar" id="sidebar">
-    <a href="#" class="sidebar-brand">
-        <div class="bg-success rounded-circle p-1 me-2 d-flex justify-content-center align-items-center" style="width: 32px; height: 32px;">
-            <i class="bi bi-mortarboard-fill text-white" style="font-size: 0.9rem;"></i>
+    <nav class="sidebar" id="sidebar">
+        <a href="#" class="sidebar-brand">
+            <div class="bg-success rounded-circle p-1 me-2 d-flex justify-content-center align-items-center"
+                style="width: 32px; height: 32px;">
+                <i class="bi bi-mortarboard-fill text-white" style="font-size: 0.9rem;"></i>
+            </div>
+            NSBM Admin
+        </a>
+        <div class="nav flex-column">
+            <a href="dashboard.html" class="nav-link active"><i class="bi bi-grid-1x2"></i>Dashboard</a>
+            <a href="admin_tables.html" class="nav-link "><i class="bi bi-qr-code"></i>Tables & QR</a>
+
         </div>
-        NSBM Admin
-    </a>
-    <div class="nav flex-column">
-        <a href="dashboard.html" class="nav-link active"><i class="bi bi-grid-1x2"></i>Dashboard</a>
-        <a href="admin_tables.html" class="nav-link"><i class="bi bi-shop"></i>Outlets & Stalls</a>
-        <a href="#" class="nav-link "><i class="bi bi-qr-code"></i>Tables & QR</a>
-        <a href="#" class="nav-link"><i class="bi bi-receipt"></i>Transactions</a>
-    </div>
 
-    <div style="position: absolute; bottom: 20px; left: 24px; right: 24px;">
-        <a href="#" class="nav-link text-danger ps-0"><i class="bi bi-box-arrow-left"></i> Logout</a>
-    </div>
-</nav>
-
-<div class="main-content">
-    
-    <button class="btn btn-dark d-md-none mb-3" onclick="document.getElementById('sidebar').classList.toggle('show')">
-        <i class="bi bi-list"></i> Menu
-    </button>
-
-    <div class="d-flex justify-content-between align-items-center mb-5">
-        <div>
-            <h3 class="fw-bold mb-1">Dashboard Overview</h3>
-            <p class="text-secondary mb-0">Manage your food court operations.</p>
+        <div style="position: absolute; bottom: 20px; left: 24px; right: 24px;">
+            <a href="login.html" class="nav-link text-danger ps-0"><i class="bi bi-box-arrow-left"></i> Logout</a>
         </div>
-        <button class="btn btn-outline-secondary rounded-pill px-3 bg-white" onclick="loadStalls()">
-            <i class="bi bi-arrow-clockwise me-2"></i>Refresh Data
+    </nav>
+
+    <div class="main-content">
+
+        <button class="btn btn-dark d-md-none mb-3"
+            onclick="document.getElementById('sidebar').classList.toggle('show')">
+            <i class="bi bi-list"></i> Menu
         </button>
-    </div>
 
-    <div class="row g-4">
-        
-        <div class="col-lg-4">
-            <div class="content-card h-100">
-                <div class="card-header-custom">
-                    <h6 class="fw-bold m-0 text-dark"><i class="bi bi-plus-circle me-2"></i>Register Outlet</h6>
-                </div>
-                <div class="p-4">
-                    <form id="addStallForm">
-                        
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold text-secondary">Outlet Logo</label>
-                            <div class="upload-area" onclick="document.getElementById('stallImage').click()">
-                                <i class="bi bi-cloud-arrow-up fs-2 text-secondary" id="uploadIcon"></i>
-                                <p class="small text-muted mb-0 mt-2 fw-bold" id="uploadText">Click to upload image</p>
-                                <input type="file" id="stallImage" name="image" hidden accept="image/*" onchange="previewFile()">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-secondary">Stall Name</label>
-                            <input type="text" class="form-control" name="name" id="stallName" required placeholder="e.g. Spicy Wok">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-secondary">Owner Name</label>
-                            <input type="text" class="form-control" name="owner" id="stallOwner" required placeholder="e.g. Mr. Perera">
-                        </div>
-
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label class="form-label small fw-bold text-secondary">Username</label>
-                                <input type="text" class="form-control" name="username" required placeholder="Login ID">
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label small fw-bold text-secondary">Password</label>
-                                <input type="password" class="form-control" name="password" required placeholder="••••••">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label class="form-label small fw-bold text-secondary">Category</label>
-                                <select class="form-select" name="category" id="stallCategory">
-                                    <option value="Main">Main Dish</option>
-                                    <option value="Snack">Short Eats</option>
-                                    <option value="Beverage">Beverage</option>
-                                </select>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label class="form-label small fw-bold text-secondary">Status</label>
-                                <select class="form-select" name="status" id="stallStatus">
-                                    <option value="Open">Open</option>
-                                    <option value="Closed">Closed</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-dark w-100 py-2 rounded-3 fw-bold mt-2 shadow-sm">
-                            Create Outlet
-                        </button>
-                    </form>
-                </div>
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h3 class="fw-bold mb-1">Dashboard Overview</h3>
+                <p class="text-secondary mb-0">Manage your food court operations.</p>
             </div>
+            <button class="btn btn-outline-secondary rounded-pill px-3 bg-white" onclick="loadStalls()">
+                <i class="bi bi-arrow-clockwise me-2"></i>Refresh Data
+            </button>
         </div>
 
-        <div class="col-lg-8">
-            <div class="content-card h-100">
-                <div class="card-header-custom">
-                    <h6 class="fw-bold m-0 text-dark">Active Canteen Outlets</h6>
-                    <span class="badge bg-light text-secondary border" id="totalCount">0 Total</span>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Outlet Info</th>
-                                <th>Category</th>
-                                <th>Owner</th>
-                                <th>Status</th>
-                                <th class="text-end">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="stallTableBody">
-                            <tr><td colspan="5" class="text-center py-5 text-muted">Loading data...</td></tr>
-                        </tbody>
-                    </table>
+        <div class="row g-4">
+
+            <div class="col-lg-4">
+                <div class="content-card h-100">
+                    <div class="card-header-custom">
+                        <h6 class="fw-bold m-0 text-dark"><i class="bi bi-plus-circle me-2"></i>Register Outlet</h6>
+                    </div>
+                    <div class="p-4">
+                        <form id="addStallForm">
+                            <input type="hidden" name="id" id="stallId">
+
+                            <div class="mb-4">
+                                <label class="form-label small fw-bold text-secondary">Outlet Logo</label>
+                                <div class="upload-area" onclick="document.getElementById('stallImage').click()">
+                                    <i class="bi bi-cloud-arrow-up fs-2 text-secondary" id="uploadIcon"></i>
+                                    <p class="small text-muted mb-0 mt-2 fw-bold" id="uploadText">Click to upload image
+                                    </p>
+                                    <input type="file" id="stallImage" name="image" hidden accept="image/*"
+                                        onchange="previewFile()">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-secondary">Stall Name</label>
+                                <input type="text" class="form-control" name="name" id="stallName" required
+                                    placeholder="e.g. Spicy Wok">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-secondary">Owner Name</label>
+                                <input type="text" class="form-control" name="owner" id="stallOwner" required
+                                    placeholder="e.g. Mr. Perera">
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small fw-bold text-secondary">Username</label>
+                                    <input type="text" class="form-control" name="username" required
+                                        placeholder="Login ID">
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small fw-bold text-secondary">Password</label>
+                                    <input type="password" class="form-control" name="password" required
+                                        placeholder="••••••">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small fw-bold text-secondary">Category</label>
+                                    <select class="form-select" name="category" id="stallCategory">
+                                        <option value="Main">Main Dish</option>
+                                        <option value="Snack">Short Eats</option>
+                                        <option value="Beverage">Beverage</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small fw-bold text-secondary">Status</label>
+                                    <select class="form-select" name="status" id="stallStatus">
+                                        <option value="Open">Open</option>
+                                        <option value="Closed">Closed</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-dark w-100 py-2 rounded-3 fw-bold mt-2 shadow-sm"
+                                id="submitBtn">
+                                Create Outlet
+                            </button>
+                            <button type="button"
+                                class="btn btn-outline-secondary w-100 py-2 rounded-3 fw-bold mt-2 shadow-sm d-none"
+                                id="cancelBtn" onclick="resetForm()">
+                                Cancel Edit
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
+
+            <div class="col-lg-8">
+                <div class="content-card h-100">
+                    <div class="card-header-custom">
+                        <h6 class="fw-bold m-0 text-dark">Active Canteen Outlets</h6>
+                        <span class="badge bg-light text-secondary border" id="totalCount">0 Total</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Outlet Info</th>
+                                    <th>Category</th>
+                                    <th>Owner</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stallTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center py-5 text-muted">Loading data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
-
     </div>
-</div>
 
-<script>
-    // --- CONFIGURATION ---
-    // Change these paths if your PHP files are in a different folder
-    const API_URL_FETCH = '../../Backend/stallController/get_stalls.php'; 
-    const API_URL_ADD   = '../../Backend/stallController/add_stall.php';
+    <script>
+        // --- CONFIGURATION ---
+        // Change these paths if your PHP files are in a different folder
+        const API_URL_FETCH = '../../Backend/stallController/get_stalls.php';
+        const API_URL_ADD = '../../Backend/stallController/add_stall.php';
+        const API_URL_UPDATE = '../../Backend/stallController/update_stall.php';
+        const API_URL_DELETE = '../../Backend/stallController/delete_stall.php';
 
-    // 1. File Upload Preview (Visual only)
-    function previewFile() {
-        const fileInput = document.getElementById('stallImage');
-        const uploadText = document.getElementById('uploadText');
-        const uploadIcon = document.getElementById('uploadIcon');
-        
-        if (fileInput.files && fileInput.files[0]) {
-            uploadText.innerText = fileInput.files[0].name;
-            uploadText.classList.add('text-success');
-            uploadIcon.className = "bi bi-check-circle-fill fs-2 text-success";
-        }
-    }
+        // 1. File Upload Preview (Visual only)
+        function previewFile() {
+            const fileInput = document.getElementById('stallImage');
+            const uploadText = document.getElementById('uploadText');
+            const uploadIcon = document.getElementById('uploadIcon');
 
-    // 2. Fetch Data from PHP
-    async function loadStalls() {
-        try {
-            const response = await fetch(API_URL_FETCH);
-            const stalls = await response.json();
-            
-            const tbody = document.getElementById('stallTableBody');
-            const totalCount = document.getElementById('totalCount');
-            
-            tbody.innerHTML = ''; // Clear table
-            totalCount.innerText = `${stalls.length} Total`;
-
-            if(stalls.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted">No outlets found in database.</td></tr>`;
-                return;
+            if (fileInput.files && fileInput.files[0]) {
+                uploadText.innerText = fileInput.files[0].name;
+                uploadText.classList.add('text-success');
+                uploadIcon.className = "bi bi-check-circle-fill fs-2 text-success";
             }
+        }
 
-            stalls.forEach(stall => {
-                // Determine Badge Style
-                const badgeClass = stall.status === 'Open' ? 'badge-soft-success' : 'badge-soft-danger';
-                
-                // Determine Image Path (Handle missing images)
-                let imgHtml = '';
-                if(stall.image_path && stall.image_path !== "default.png") {
-                    imgHtml = `<img src="../../Backend/${stall.image_path}" class="stall-logo me-3" alt="logo">`;
-                } else {
-                    // Fallback Icon
-                    imgHtml = `<div class="bg-light rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px"><i class="bi bi-shop text-secondary"></i></div>`;
+        // 2. Fetch Data from PHP
+        async function loadStalls() {
+            try {
+                const response = await fetch(API_URL_FETCH);
+                const stalls = await response.json();
+
+                const tbody = document.getElementById('stallTableBody');
+                const totalCount = document.getElementById('totalCount');
+
+                tbody.innerHTML = ''; // Clear table
+                totalCount.innerText = `${stalls.length} Total`;
+
+                if (stalls.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted">No outlets found in database.</td></tr>`;
+                    return;
                 }
 
-                const row = `
+                stalls.forEach(stall => {
+                    // Determine Badge Style
+                    const badgeClass = stall.status === 'Open' ? 'badge-soft-success' : 'badge-soft-danger';
+
+                    // Determine Image Path (Handle missing images)
+                    let imgHtml = '';
+                    if (stall.image_path && stall.image_path !== "default.png") {
+                        imgHtml = `<img src="../../Backend/${stall.image_path}" class="stall-logo me-3" alt="logo">`;
+                    } else {
+                        // Fallback Icon
+                        imgHtml = `<div class="bg-light rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width:40px;height:40px"><i class="bi bi-shop text-secondary"></i></div>`;
+                    }
+
+                    const row = `
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
@@ -332,66 +386,130 @@
                     <td>${stall.owner}</td>
                     <td><span class="badge ${badgeClass}">${stall.status}</span></td>
                     <td class="text-end">
-                        <button class="btn btn-sm btn-light border text-danger"><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-sm btn-light border text-primary me-1" onclick='editStall(${JSON.stringify(stall)})'><i class="bi bi-pencil-square"></i></button>
+                        <button class="btn btn-sm btn-light border text-danger" onclick="deleteStall(${stall.id})"><i class="bi bi-trash"></i></button>
                     </td>
                 </tr>`;
-                
-                tbody.innerHTML += row;
-            });
 
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            document.getElementById('stallTableBody').innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">Error connecting to database.</td></tr>`;
-        }
-    }
+                    tbody.innerHTML += row;
+                });
 
-    // 3. Add Stall (Send Form Data to PHP)
-    document.getElementById('addStallForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerText;
-        submitBtn.innerText = "Saving...";
-        submitBtn.disabled = true;
-
-        // Create FormData (Automatically handles text fields + file input)
-        const formData = new FormData(this);
-
-        try {
-            const response = await fetch(API_URL_ADD, {
-                method: 'POST',
-                body: formData // No headers needed for FormData
-            });
-            
-            const result = await response.json();
-            
-            if(result.success) {
-                // Reset Form
-                this.reset();
-                document.getElementById('uploadText').innerText = "Click to upload image";
-                document.getElementById('uploadText').classList.remove('text-success');
-                document.getElementById('uploadIcon').className = "bi bi-cloud-arrow-up fs-2 text-secondary";
-                
-                // Refresh Table
-                loadStalls();
-                alert("Outlet added successfully!");
-            } else {
-                alert("Error: " + result.message);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('stallTableBody').innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4">Error connecting to database.</td></tr>`;
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert("Failed to connect to server.");
-        } finally {
-            submitBtn.innerText = originalText;
-            submitBtn.disabled = false;
         }
-    });
 
-    // Initial Load
-    document.addEventListener('DOMContentLoaded', loadStalls);
+        // 3. Add / Update Stall
+        document.getElementById('addStallForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-</script>
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = "Saving...";
+            submitBtn.disabled = true;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            const formData = new FormData(this);
+            const isUpdate = !!formData.get('id');
+            const url = isUpdate ? API_URL_UPDATE : API_URL_ADD;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(isUpdate ? "Outlet updated successfully!" : "Outlet added successfully!");
+                    resetForm();
+                    loadStalls();
+                } else {
+                    alert("Error: " + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Failed to connect to server.");
+            } finally {
+                submitBtn.innerText = isUpdate ? "Update Outlet" : "Create Outlet";
+                submitBtn.disabled = false;
+            }
+        });
+
+        // 5. Edit Stall Function (Populate Form)
+        function editStall(stall) {
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Populate Fields
+            document.getElementById('stallId').value = stall.id;
+            document.getElementById('stallName').value = stall.name;
+            document.getElementById('stallOwner').value = stall.owner;
+            document.querySelector('input[name="username"]').value = stall.username || '';
+            document.querySelector('input[name="password"]').value = stall.password || '';
+            document.getElementById('stallCategory').value = stall.category;
+            document.getElementById('stallStatus').value = stall.status;
+
+            // Update UI
+            document.querySelector('.card-header-custom h6').innerHTML = '<i class="bi bi-pencil-square me-2"></i>Update Outlet';
+            document.getElementById('submitBtn').innerText = "Update Outlet";
+            document.getElementById('cancelBtn').classList.remove('d-none');
+
+            // Update Image Text if exists
+            if (stall.image_path) {
+                document.getElementById('uploadText').innerText = "Keep current or upload new";
+            }
+        }
+
+        // 6. Reset Form
+        function resetForm() {
+            document.getElementById('addStallForm').reset();
+            document.getElementById('stallId').value = '';
+
+            // Return UI to "Add" state
+            document.querySelector('.card-header-custom h6').innerHTML = '<i class="bi bi-plus-circle me-2"></i>Register Outlet';
+            document.getElementById('submitBtn').innerText = "Create Outlet";
+            document.getElementById('cancelBtn').classList.add('d-none');
+
+            // Reset Upload Text
+            document.getElementById('uploadText').innerText = "Click to upload image";
+            document.getElementById('uploadText').classList.remove('text-success');
+            document.getElementById('uploadIcon').className = "bi bi-cloud-arrow-up fs-2 text-secondary";
+        }
+
+        // 4. Delete Stall Function
+        async function deleteStall(id) {
+            if (!confirm("Are you sure you want to delete this stall? This action cannot be undone.")) return;
+
+            try {
+                const response = await fetch(API_URL_DELETE, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Show temporary success message or toast if preferred, but alert is consistent with existing code
+                    // alert("Outlet deleted successfully!"); 
+                    loadStalls(); // Refresh the table
+                } else {
+                    alert("Error: " + result.message);
+                }
+            } catch (error) {
+                console.error('Error deleting stall:', error);
+                alert("Failed to connect to server.");
+            }
+        }
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', loadStalls);
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
