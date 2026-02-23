@@ -1,3 +1,90 @@
-body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        /* Custom scrollbar for the checkbox list */
-        .stall-scroll-container { max-height: 250px; overflow-y: auto; }
+:root {
+        --primary-color: #059669;
+        /* Emerald Green */
+        --dark-sidebar: #0f172a;
+        /* Slate 900 */
+        --bg-body: #f1f5f9;
+        /* Slate 100 */
+        --text-main: #334155;
+        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+body {
+        background-color: var(--bg-body);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+        width: 260px;
+        height: 100vh;
+        background-color: var(--dark-sidebar);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        padding: 24px;
+        transition: transform 0.3s ease;
+}
+
+.sidebar-brand {
+        display: flex;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 2.5rem;
+}
+
+.nav-link {
+        display: flex;
+        align-items: center;
+        color: #94a3b8;
+        /* Slate 400 */
+        padding: 12px 16px;
+        border-radius: 10px;
+        margin-bottom: 4px;
+        transition: all 0.2s;
+        font-weight: 500;
+        text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+}
+
+.nav-link i {
+        font-size: 1.1rem;
+        margin-right: 12px;
+}
+
+/* --- Main Content --- */
+/* Note: Admin tables page seems to use a grid layout (col-lg-2 for sidebar), 
+           but dashboard uses absolute positioning. 
+           To make them indentical, we should use the same CSS structure.
+           The dashboard uses .main-content { margin-left: 260px; }
+        */
+
+@media (max-width: 992px) {
+
+        /* d-lg-none breakpoint */
+        .sidebar {
+                transform: translateX(-100%);
+                width: 260px;
+        }
+
+        .sidebar.show {
+                transform: translateX(0);
+        }
+}
+
+/* Custom scrollbar for the checkbox list */
+.stall-scroll-container {
+        max-height: 250px;
+        overflow-y: auto;
+}
