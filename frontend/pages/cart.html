@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSBM - My Cart</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --primary-color: #059669; --bg-light: #f8fafc; --text-dark: #1e293b; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-light); padding-bottom: 220px; }
+        .cart-header { background: white; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .stall-group { background: white; border-radius: 16px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .stall-header { display: flex; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 15px; }
+        .stall-logo-small { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 12px; border: 1px solid #e2e8f0; }
+        .stall-name { font-size: 1.1rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+        .cart-item { display: flex; gap: 15px; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f8fafc; }
+        .cart-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .item-img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: #f1f5f9; }
+        .qty-control { display: flex; align-items: center; background: #f1f5f9; border-radius: 8px; padding: 2px; }
+        .btn-qty { width: 28px; height: 28px; border: none; background: white; border-radius: 6px; color: var(--text-dark); font-weight: bold; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .qty-val { width: 30px; text-align: center; font-weight: 600; font-size: 0.9rem; }
+        .checkout-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 25px 20px; box-shadow: 0 -5px 30px rgba(0,0,0,0.08); border-radius: 25px 25px 0 0; z-index: 1000; }
+        .table-badge-large { font-size: 1.2rem; padding: 15px; border-radius: 16px; font-weight: 800; text-align: center; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .bg-table-active { background: linear-gradient(135deg, #059669, #10b981); color: white; }
+        .bg-table-takeaway { background: #e2e8f0; color: #475569; }
+        .btn-checkout { background: var(--text-dark); color: white; border: none; width: 100%; padding: 16px; border-radius: 14px; font-weight: 700; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s; }
+        .btn-checkout:active { transform: scale(0.98); }
+        .empty-cart { text-align: center; padding: 60px 20px; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+    <header class="cart-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <a href="stall_list.html" class="text-dark me-3 fs-4"><i class="bi bi-arrow-left"></i></a>
+            <h4 class="fw-bold m-0">My Cart</h4>
+        </div>
+        <button class="btn btn-sm text-danger fw-bold" onclick="clearCart()">Clear All</button>
+    </header>
+
+    <main class="container mt-4" id="cartContainer">
+        <div class="text-center py-5">
+            <div class="spinner-border text-success" role="status"></div>
+            <p class="text-muted mt-2">Loading cart details...</p>
+        </div>
+    </main>
+
+    <div class="checkout-bar" id="checkoutBar" style="display: none;">
+        <div id="tableDisplay" class="table-badge-large bg-table-takeaway">
+            <i class="bi bi-bag-fill fs-4"></i> <span>Checking Table...</span>
+        </div>
+        <div class="d-flex justify-content-between mb-3 px-1">
+            <span class="text-secondary fw-medium">Total Amount</span>
+            <span class="fw-bold fs-5 text-dark" id="subtotalDisplay">LKR 0</span>
+        </div>
+        <button class="btn-checkout shadow-lg" onclick="placeOrder()">
+            <span>Confirm Order</span>
+            <span id="totalDisplay">LKR 0</span>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const CART_KEY = 'nsbm_cart';
+        const STALLS_API = '../../Backend/stallController/get_stalls.php';
+        const ORDER_API = '../../Backend/orderController/place_order.php';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkTableNumber();
+            renderCart();
+        });
+
+        function checkTableNumber() {
+            const tableId = localStorage.getItem('nsbm_table_id');
+            const display = document.getElementById('tableDisplay');
+            if (tableId) {
+                display.innerHTML = `<i class="bi bi-geo-alt-fill fs-3"></i> <span>Dining at Table #${tableId}</span>`;
+                display.className = 'table-badge-large bg-table-active';
+            } else {
+                display.innerHTML = `<i class="bi bi-bag-check-fill fs-3"></i> <span>Takeaway / Counter</span>`;
+                display.className = 'table-badge-large bg-table-takeaway';
+            }
+        }
+
+        async function renderCart() {
+            const container = document.getElementById('cartContainer');
+            const checkoutBar = document.getElementById('checkoutBar');
+            let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="empty-cart"><i class="bi bi-basket display-1 mb-3"></i><h5>Your cart is empty</h5><a href="stall_list.html" class="btn btn-success mt-3 rounded-pill px-4">Browse Stalls</a></div>`;
+                checkoutBar.style.display = 'none';
+                return;
+            }
+
+            let stallMap = {}; 
+            try {
+                const response = await fetch(STALLS_API);
+                const stallsData = await response.json();
+                stallsData.forEach(stall => {
+                    let logoUrl = "https://via.placeholder.com/40?text=S";
+                    if (stall.image_path) {
+                        if (stall.image_path.includes('Backend')) logoUrl = "../../" + stall.image_path;
+                        else logoUrl = "../../Backend/" + stall.image_path;
+                    }
+                    stallMap[stall.id] = { name: stall.name, logo: logoUrl };
+                });
+            } catch (error) { console.error("Failed to fetch stall details", error); }
+
+            const groupedItems = cart.reduce((groups, item) => {
+                const key = item.stallId;
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(item);
+                return groups;
+            }, {});
+
+            container.innerHTML = ''; 
+            let grandTotal = 0;
+
+            for (const stallId in groupedItems) {
+                const items = groupedItems[stallId];
+                const stallInfo = stallMap[stallId] || { name: items[0].stallName || `Stall #${stallId}`, logo: 'https://via.placeholder.com/40?text=?' };
+
+                let groupHtml = `
+                <div class="stall-group">
+                    <div class="stall-header">
+                        <img src="${stallInfo.logo}" class="stall-logo-small" alt="logo" onerror="this.src='https://via.placeholder.com/40'">
+                        <h5 class="stall-name">${stallInfo.name}</h5>
+                    </div>`;
+
+                items.forEach(item => {
+                    const itemTotal = item.price * item.qty;
+                    grandTotal += itemTotal;
+                    groupHtml += `
+                    <div class="cart-item">
+                        <img src="${item.image}" class="item-img" onerror="this.src='https://via.placeholder.com/80?text=Food'">
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-1 text-dark">${item.name}</h6>
+                            <small class="text-muted">LKR ${item.price}</small>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div class="qty-control">
+                                    <button class="btn-qty" onclick="updateQty(${item.id}, '${item.stallId}', -1)">-</button>
+                                    <div class="qty-val">${item.qty}</div>
+                                    <button class="btn-qty" onclick="updateQty(${item.id}, '${item.stallId}', 1)">+</button>
+                                </div>
+                                <span class="fw-bold text-dark">LKR ${itemTotal}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                });
+                groupHtml += `</div>`;
+                container.innerHTML += groupHtml;
+            }
+
+            checkoutBar.style.display = 'block';
+            document.getElementById('subtotalDisplay').innerText = `LKR ${grandTotal}`;
+            document.getElementById('totalDisplay').innerText = `LKR ${grandTotal}`;
+        }
+
+        function updateQty(itemId, stallId, change) {
+            let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+            const index = cart.findIndex(item => item.id == itemId && item.stallId == stallId);
+            if (index !== -1) {
+                cart[index].qty += change;
+                if (cart[index].qty <= 0) {
+                    if(confirm("Remove this item?")) cart.splice(index, 1);
+                    else cart[index].qty = 1;
+                }
+            }
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+            renderCart(); 
+        }
+
+        function clearCart() {
+            if(confirm("Clear cart?")) {
+                localStorage.removeItem(CART_KEY);
+                renderCart();
+            }
+        }
+
+        // --- UPDATED: PLACE ORDER TO BACKEND ---
+        async function placeOrder() {
+            const cart = JSON.parse(localStorage.getItem(CART_KEY));
+            if(!cart || cart.length === 0) return;
+
+            const tableId = localStorage.getItem('nsbm_table_id') || "Takeaway";
+            const totalAmount = document.getElementById('totalDisplay').innerText.replace('LKR ', '');
+            
+            const btn = document.querySelector('.btn-checkout');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Sending...';
+            btn.disabled = true;
+
+            const orderPayload = {
+                table_id: tableId,
+                items: cart,
+                total: totalAmount
+            };
+
+            try {
+                const response = await fetch(ORDER_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderPayload)
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(`Order Placed Successfully! (Order #${result.order_id})\nPlease wait at Table #${tableId}`);
+                    localStorage.removeItem(CART_KEY);
+                    window.location.href = "stall_list.html"; 
+                } else {
+                    alert("Order Failed: " + result.message);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Network Error. Check console.");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

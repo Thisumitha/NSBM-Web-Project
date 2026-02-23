@@ -1,0 +1,55 @@
+/* Container Layout */
+.stores-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 40px;
+    justify-content: center;
+    background-color: #f8f9fa;
+    min-height: 60vh;
+}
+
+/* Card Styling */
+.store-card {
+    width: 300px; /* Fixed width for uniformity */
+    border: none;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    background: white;
+}
+
+.store-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Image Styling - Crucial for nice grid */
+.img-wrapper {
+    position: relative;
+    height: 180px; /* Fixed height forces images to align */
+    overflow: hidden;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Crops image to fill box without stretching */
+}
+
+/* Badge over image */
+.status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.8rem;
+}
+
+/* Header */
+.main-header {
+    background: #198754; /* NSBM Green */
+    color: white;
+    padding: 40px 20px;
+    text-align: center;
+    margin-bottom: 0;
+}
