@@ -1,3 +1,110 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+}
+
+/* Header */
+.store-header {
+    background: linear-gradient(135deg, #003E7E, #FFC300);
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.store-header h1 {
+    font-size: 34px;
+}
+
+/* Categories */
+.category-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    padding: 30px;
+    flex-wrap: wrap;
+}
+
+.category-card {
+    background: white;
+    padding: 15px 25px;
+    border-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.category-card:hover {
+    background: #003E7E;
+    color: white;
+}
+
+/* Food Items */
+.food-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px 40px 50px;
+}
+
+.food-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+.food-card img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.food-card h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #003E7E;
+}
+
+.food-card p {
+    font-size: 14px;
+    color: #666;
+}
+
+.food-card button {
+    margin-top: 10px;
+    background: #003E7E;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.food-card button:hover {
+    background: #FFC300;
+    color: #003E7E;
+}
+/* Footer */
+.store-footer {
+    background: #003E7E;
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* existing aftermenu.css content */
+
 /* Food Items */
 .food-card button:hover {
     background: #FFC300;

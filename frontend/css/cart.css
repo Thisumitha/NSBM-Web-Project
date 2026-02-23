@@ -1,0 +1,64 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body{
+    background: #f4f6f9;
+}
+
+/* Cart Box */
+#cartBox{
+    max-width: 400px;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* Image */
+#cartBox img{
+    width: 150px;
+    margin: 15px 0;
+    border-radius: 12px;
+}
+
+/* Restaurant */
+#cartBox h3{
+    color: #003E7E;
+    margin-bottom: 8px;
+}
+
+/* Food Name */
+#cartBox h4{
+    font-size: 18px;
+    margin: 8px 0;
+}
+
+/* Price */
+#cartBox p{
+    font-weight: bold;
+    color: #333;
+}
+
+/* Button */
+#confirmBtn{
+    margin-top: 15px;
+    width: 100%;
+    background: #003E7E;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#confirmBtn:hover{
+    background: #FFC300;
+    color: #003E7E;
+}
