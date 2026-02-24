@@ -1,56 +1,160 @@
+:root {
+  --primary: #0b7a3b;
+  --primary-light: #e6f2ec;
+  --bg-color: #f8fafc;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --white: #ffffff;
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
 body {
-  background-color: #f4f7f6;
-  font-family: "Segoe UI", sans-serif;
-  color: #1f2933;
+  background-color: var(--bg-color);
+  font-family: 'Inter', "Segoe UI", system-ui, sans-serif;
+  color: var(--text-main);
+  line-height: 1.5;
 }
 
-/* Navbar */
+/* Navbar: Adding a subtle blur/glass effect */
 .cart-navbar {
-  background-color: #0b7a3b;
+  background-color: rgba(11, 122, 59, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow);
 }
 
-/* Card */
+/* Card: Increased rounding and floating effect */
 .cart-card {
-  border-radius: 12px;
-  border: none;
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
+  overflow: hidden; /* Keeps table corners rounded */
+  transition: transform 0.2s ease;
 }
 
-/* Table */
+/* Table: Minimalist approach */
+.cart-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
 .cart-table thead {
-  background-color: #e6f2ec;
-  color: #065a2b;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
 }
 
 .cart-table th {
-  font-weight: 600;
+  padding: 16px;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(0,0,0,0.05);
 }
 
 .cart-table td {
-  background-color: #ffffff;
+  padding: 20px 16px;
+  background-color: var(--white);
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
 }
 
-/* Footer */
+/* Footer: More breathing room */
 .cart-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 25px;
+  padding: 2rem 1rem;
+  background: var(--white);
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+
+.cart-footer h5 {
+  font-size: 1.25rem;
+  color: var(--text-muted);
 }
 
 .cart-footer h5 span {
-  color: #0b7a3b;
-  font-weight: 700;
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.5rem;
+  margin-left: 8px;
 }
 
-/* Remove button */
+/* Remove Button: Tactile & Interactive */
 .remove-btn {
   border: none;
-  background: transparent;
-  color: #dc3545;
-  font-size: 18px;
+  background: #fee2e2;
+  color: #ef4444;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .remove-btn:hover {
-  color: #a71d2a;
+  background: #ef4444;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+  .cart-footer {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}/* Quantity Selector Wrapper */
+.qty-control {
+  display: flex;
+  align-items: center;
+  background: #f1f5f9;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 4px;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: white;
+  color: #0b7a3b;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.qty-btn:hover {
+  background: #0b7a3b;
+  color: white;
+}
+
+.qty-input {
+  width: 45px;
+  text-align: center;
+  border: none;
+  background: transparent;
+  font-weight: 600;
+  font-size: 1rem;
+  outline: none;
+  /* Removes arrows from number input */
+  -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
