@@ -116,10 +116,11 @@
 
     <script>
         // --- 1. AUTH & CONFIG ---
-        const MY_STALL_ID = localStorage.getItem('stall_id');
+        const MY_STALL_ID = sessionStorage.getItem('stall_id');
+        console.log(MY_STALL_ID);
         const API_URL = '../../Backend/stallController/get_dashboard_stats.php';
 
-        // Redirect if not logged in
+        // // Redirect if not logged in
         if (!MY_STALL_ID) {
             alert("Please log in first.");
             window.location.href = 'stall_login.html';

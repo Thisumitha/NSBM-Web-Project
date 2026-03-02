@@ -5,7 +5,6 @@ include '../DBMSConector/db_connect.php';
 // Check if stall_id is provided
 if(isset($_GET['stall_id'])) {
     $stall_id = $_GET['stall_id'];
-    
     // Prevent SQL Injection basic protection
     $stall_id = $conn->real_escape_string($stall_id);
 

@@ -420,7 +420,7 @@
                 });
 
                 const result = await response.json();
-
+                console.log(result.JSON);
                 if (result.success) {
                     alert(isUpdate ? "Outlet updated successfully!" : "Outlet added successfully!");
                     resetForm();

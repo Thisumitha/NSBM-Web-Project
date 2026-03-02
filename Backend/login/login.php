@@ -3,8 +3,8 @@
 $user_input = $_POST['username'];
 $pass_input = $_POST['password'];
 
-$correct_username = "NSBM-12345";
-$correct_password = "password123";
+$correct_username = "nsbm";
+$correct_password = "123";
 
 
 if ($user_input === $correct_username && $pass_input === $correct_password) {

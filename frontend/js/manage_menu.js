@@ -1,8 +1,8 @@
 
 // 1. Get the logged-in Stall ID (Assuming you saved this during login)
 // If you are testing without login, you can hardcode this: const stallId = 1;
-const stallId = sessionStorage.getItem('loggedStallId') || 1;
-
+const stallId = sessionStorage.getItem('stall_id') || 1;
+console.log(stallId);
 // Variable to store the file object for upload
 let selectedFile = null;
 let allMenuItems = []; // Store fetched items here

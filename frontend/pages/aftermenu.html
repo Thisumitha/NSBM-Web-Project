@@ -256,6 +256,7 @@
         
         try {
             const response = await fetch(`${MENU_API_URL}?stall_id=${stallId}`);
+            console.log(response);
             const data = await response.json();
 
             if (!Array.isArray(data) || data.length === 0) {
