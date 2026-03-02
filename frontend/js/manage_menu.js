@@ -1,7 +1,7 @@
 
 // 1. Get the logged-in Stall ID (Assuming you saved this during login)
 // If you are testing without login, you can hardcode this: const stallId = 1;
-const stallId = sessionStorage.getItem('stall_id') || 1;
+const stallId = localStorage.getItem('stall_id') || 1;
 console.log(stallId);
 // Variable to store the file object for upload
 let selectedFile = null;
@@ -220,3 +220,10 @@ function viewShop() {
 
 // Initial Load
 document.addEventListener('DOMContentLoaded', loadMenu);
+
+// --- FUNCTION: LOGOUT ---
+function logout() {
+    localStorage.removeItem('stall_id');
+    localStorage.removeItem('stall_name');
+    window.location.href = 'stall_login.html';
+}

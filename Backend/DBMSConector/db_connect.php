@@ -1,12 +1,12 @@
 <?php
 $servername = "localhost";
 $username = "root";      // Default XAMPP username
-$password = "";          // Default XAMPP password is empty
+$password = "Thisu@2006";          // Default XAMPP password is empty
 $dbname = "nsbm_canteen_db";
 
 
 // Create connection
-$conn = new mysqli($servername, $username, $password, $dbname,);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
