@@ -9,7 +9,7 @@ body {
     background: #f4f6f9;
 }
 
-/* Header */
+
 .store-header {
     background: linear-gradient(135deg, #003E7E, #FFC300);
     color: white;
@@ -21,7 +21,7 @@ body {
     font-size: 34px;
 }
 
-/* Categories */
+
 .category-container {
     display: flex;
     gap: 15px;
@@ -44,7 +44,7 @@ body {
     color: white;
 }
 
-/* Food Items */
+
 .food-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -92,7 +92,7 @@ body {
     background: #FFC300;
     color: #003E7E;
 }
-/* Footer */
+
 .store-footer {
     background: #003E7E;
     color: white;

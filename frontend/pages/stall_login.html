@@ -59,11 +59,10 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        // --- UPDATE: Save to localStorage ---
+
                         localStorage.setItem('stall_id', data.stall_id);
                         localStorage.setItem('stall_name', data.stall_name);
 
-                        // Redirect
                         window.location.href = 'stall_dashboard.html';
                     } else {
                         document.getElementById('errorMsg').innerText = data.message;

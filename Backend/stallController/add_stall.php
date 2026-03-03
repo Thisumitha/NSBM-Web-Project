@@ -1,12 +1,11 @@
 <?php
-// add_stall.php
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 include '../DBMSConector/db_connect.php';
 
 $response = array();
 
-// --- STEP 0: Create Table (Updated with username/password) ---
 $table_sql = "CREATE TABLE IF NOT EXISTS stalls (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -28,19 +27,16 @@ if (!$conn->query($table_sql)) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // 1. Collect Text Data (Added Username and Password)
     $name = $_POST['name'] ?? '';
     $category = $_POST['category'] ?? '';
     $owner = $_POST['owner'] ?? '';
     $status = $_POST['status'] ?? 'Open';
-    $username = $_POST['username'] ?? ''; // New Field
-    $password = $_POST['password'] ?? ''; // New Field
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-    // 2. Handle Image Upload
     $upload_dir = "../uploads/";
-    $image_db_path = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1 1'%3E%3Crect fill='%23cccccc' width='1' height='1'/%3E%3C/svg%3E"; // Default
+    $image_db_path = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1 1'%3E%3Crect fill='%23cccccc' width='1' height='1'/%3E%3C/svg%3E";
 
-    // Create directory if it doesn't exist
     if (!is_dir($upload_dir)) {
         if (!mkdir($upload_dir, 0777, true)) {
             $response['success'] = false;
@@ -62,14 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // 3. Insert into Database (Updated to include username/password)
-    // Note: In a real production app, you should hash the password (e.g., password_hash($password, PASSWORD_DEFAULT))
-    // For now, we are storing it as plain text as per your example data.
+
+
 
     $stmt = $conn->prepare("INSERT INTO stalls (name, category, owner, status, username, password, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
     if ($stmt) {
-        // "sssssss" = 7 strings
+
         $stmt->bind_param("sssssss", $name, $category, $owner, $status, $username, $password, $image_db_path);
 
         if ($stmt->execute()) {

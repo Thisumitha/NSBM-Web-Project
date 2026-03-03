@@ -1,12 +1,11 @@
 <?php
-// update_stall.php
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 include '../DBMSConector/db_connect.php';
 
 $response = array();
 
-// Helper to update stall details
 function updateStall($conn, $id, $name, $category, $owner, $status, $username, $password, $image_path = null)
 {
     if ($image_path) {
@@ -29,7 +28,6 @@ function updateStall($conn, $id, $name, $category, $owner, $status, $username, $
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // 1. Collect Data
     $id = $_POST['id'] ?? null;
     $name = $_POST['name'] ?? '';
     $category = $_POST['category'] ?? '';
@@ -43,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // 2. Handle Image Upload
     $upload_dir = "../uploads/";
     $image_db_path = null;
 
@@ -60,7 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // 3. Update Database
     $stmt = updateStall($conn, $id, $name, $category, $owner, $status, $username, $password, $image_db_path);
 
     if ($stmt && $stmt->execute()) {

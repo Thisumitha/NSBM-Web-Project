@@ -11,7 +11,6 @@ if(!empty($data->order_id) && !empty($data->status) && !empty($data->stall_id)) 
     $status   = $conn->real_escape_string($data->status);
     $stall_id = $conn->real_escape_string($data->stall_id);
 
-    // Update ALL items for this order belonging to this stall
     $sql = "UPDATE order_items 
             SET status = '$status' 
             WHERE order_id = '$order_id' AND stall_id = '$stall_id'";

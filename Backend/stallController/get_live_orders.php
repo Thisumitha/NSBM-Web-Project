@@ -6,8 +6,8 @@ include '../DBMSConector/db_connect.php';
 $stall_id = $_GET['stall_id'] ?? 0;
 
 if($stall_id) {
-    // Fetch items joined with order details
-    // We filter out 'Completed' because they shouldn't be on the board
+
+
     $sql = "SELECT 
                 o.id as order_id,
                 o.table_id,

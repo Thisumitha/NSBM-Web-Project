@@ -11,24 +11,24 @@
     
     <style>
         :root {
-            --primary-color: #059669; /* Emerald Green */
-            --accent-color: #f59e0b;  /* Amber */
+            --primary-color: #059669; 
+            --accent-color: #f59e0b;  
             --bg-light: #f8fafc;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-light);
-            padding-bottom: 80px; /* Space for footer */
+            padding-bottom: 80px; 
         }
 
-        /* Hero Header */
+        
         .store-header {
             background: linear-gradient(135deg, #064e3b, #059669);
             color: white;
             padding: 60px 0 80px;
             border-radius: 0 0 30px 30px;
-            margin-bottom: -40px; /* Overlap effect */
+            margin-bottom: -40px; 
             position: relative;
         }
 
@@ -47,16 +47,16 @@
         }
         .back-btn:hover { background: rgba(255,255,255,0.3); color: white; }
 
-        /* Category Filter Pills */
+        
         .category-scroll {
             display: flex;
             gap: 10px;
             overflow-x: auto;
             padding: 10px 5px;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
+            scrollbar-width: none; 
             margin-bottom: 20px;
         }
-        .category-scroll::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+        .category-scroll::-webkit-scrollbar { display: none; } 
 
         .cat-pill {
             background: white;
@@ -79,7 +79,7 @@
             box-shadow: 0 5px 10px rgba(5, 150, 105, 0.2);
         }
 
-        /* Food Card */
+        
         .food-card {
             background: white;
             border: none;
@@ -123,7 +123,7 @@
             color: white;
         }
 
-        /* Floating Cart Button */
+        
         .fab-cart {
             position: fixed;
             bottom: 25px;
@@ -187,9 +187,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // --- 1. CONFIGURATION ---
+
     const MENU_API_URL = '../../Backend/stallController/get_menu_items.php'; 
-    const STALLS_API_URL = '../../Backend/stallController/get_stalls.php'; // Reuse this to get logo
+    const STALLS_API_URL = '../../Backend/stallController/get_stalls.php';
     const ROOT_PATH = '../../backend/'; 
     const CART_KEY = 'nsbm_cart'; 
 
@@ -198,7 +198,6 @@
     
     let allMenuItems = [];
 
-    // --- 2. INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
         if (!stallId) {
             alert("No stall selected!");
@@ -206,35 +205,30 @@
             return;
         }
 
-        // Load Stall Details (Logo, Name) AND Menu
         fetchStallDetails(); 
         fetchMenu();
         updateCartButton(); 
     });
 
-    // --- 3. FETCH STALL DETAILS (LOGO & NAME) ---
     async function fetchStallDetails() {
         try {
             const response = await fetch(STALLS_API_URL);
             const stalls = await response.json();
-            
-            // Find the specific stall matching our ID
+
             const currentStall = stalls.find(s => s.id == stallId);
 
             if (currentStall) {
-                // 1. Update Name
+
                 document.getElementById('storeName').innerText = currentStall.name;
-                
-                // 2. Update Owner/Description
+
                 if(currentStall.owner) {
                     document.getElementById('storeDesc').innerText = "Owner: " + currentStall.owner;
                 }
 
-                // 3. Update Logo Image
                 let logoUrl = "https://via.placeholder.com/80?text=Logo";
                 
                 if (currentStall.image_path) {
-                    // Fix path logic (similar to your list page)
+
                     if (currentStall.image_path.includes('Backend') || currentStall.image_path.includes('backend')) {
                         logoUrl = "../../" + currentStall.image_path; 
                     } else if (currentStall.image_path.includes('uploads/')) {
@@ -250,7 +244,6 @@
         }
     }
 
-    // --- 4. FETCH MENU ITEMS ---
     async function fetchMenu() {
         const container = document.getElementById('foodContainer');
         
@@ -280,7 +273,6 @@
         }
     }
 
-    // --- 5. RENDER FUNCTIONS ---
     function renderCategories(categories) {
         const container = document.getElementById('categoryContainer');
         container.innerHTML = '';
@@ -299,7 +291,7 @@
         container.innerHTML = '';
 
         items.forEach(item => {
-            // Get Image
+
             const dbImage = item.image_url || item.image_path || item.image;
             let imageUrl = "https://via.placeholder.com/500x300?text=No+Image";
 
@@ -346,7 +338,6 @@
         else renderFood(allMenuItems.filter(item => item.category === category));
     }
 
-    // --- 6. CART LOGIC ---
     function addToCart(itemId) {
         const item = allMenuItems.find(i => i.id == itemId); 
         
@@ -362,8 +353,7 @@
         }, 1000);
 
         const itemName = item.item_name || item.name;
-        
-        // Cart Image Logic
+
         const dbImage = item.image_url || item.image_path || item.image;
         let itemImage = "https://via.placeholder.com/500x300?text=No+Image";
         if (dbImage) {

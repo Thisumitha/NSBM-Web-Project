@@ -1,7 +1,6 @@
 <?php
-// Backend/stallController/get_dashboard_stats.php
 
-// 1. Setup Error Handling
+
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
@@ -11,7 +10,7 @@ header('Content-Type: application/json');
 $response = [];
 
 try {
-    // 2. Connect to Database
+
     $db_path = '../DBMSConector/db_connect.php';
     if (!file_exists($db_path)) {
         throw new Exception("Database file not found.");
@@ -22,13 +21,11 @@ try {
         throw new Exception("Database Connection Failed.");
     }
 
-    // 3. Validate Input
     $stall_id = isset($_GET['stall_id']) ? intval($_GET['stall_id']) : 0;
     if ($stall_id <= 0) {
         throw new Exception("Invalid Stall ID provided.");
     }
 
-    // --- QUERY 1: METRICS ---
     $sql_metrics = "SELECT 
         COALESCE(SUM(price * quantity), 0) as total_revenue,
         COUNT(DISTINCT order_id) as total_orders,
@@ -49,7 +46,6 @@ try {
     $response['pending'] = (int)($metrics['pending_count'] ?? 0);
     $stmt->close();
 
-    // --- QUERY 2: TOP SELLING ITEMS ---
     $sql_top = "SELECT item_name, 
                        SUM(quantity) as sold_count, 
                        SUM(price * quantity) as earnings 
@@ -73,10 +69,9 @@ try {
     $response['top_items'] = $top_items;
     $stmt->close();
 
-    // --- QUERY 3: HOURLY CHART (FIXED FOR STRICT MODE) ---
-    // Changes: 
-    // 1. Added DATE_FORMAT(...) to GROUP BY
-    // 2. Changed ORDER BY to MIN(o.created_at)
+
+
+
     $sql_chart = "SELECT DATE_FORMAT(o.created_at, '%l %p') as hour_label, 
                          SUM(oi.price * oi.quantity) as hourly_total
                   FROM order_items oi
@@ -103,7 +98,6 @@ try {
     $response['chart'] = ['labels' => $chart_labels, 'data' => $chart_data];
     $stmt->close();
 
-    // 4. Output JSON
     echo json_encode($response);
 
 } catch (Exception $e) {

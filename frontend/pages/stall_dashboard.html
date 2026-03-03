@@ -22,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* Sidebar */
+        
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -79,7 +79,7 @@
             }
         }
 
-        /* Dashboard Styles */
+        
         .stat-card {
             border: none;
             border-radius: 16px;
@@ -239,13 +239,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        // --- 1. AUTH & CONFIG ---
-        // update
+
+
         const MY_STALL_ID = localStorage.getItem('stall_id');
         console.log(MY_STALL_ID);
         const API_URL = '../../Backend/stallController/get_dashboard_stats.php';
 
-        // // Redirect if not logged in
         if (!MY_STALL_ID) {
             alert("Please log in first.");
             window.location.href = 'stall_login.html';
@@ -256,14 +255,11 @@
             window.location.href = 'stall_login.html';
         }
 
-        // Set Date
         const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
         document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', options);
 
-        // Chart Instance Variable
         let myChart = null;
 
-        // Fetch Data on Load
         document.addEventListener('DOMContentLoaded', loadDashboardData);
 
         async function loadDashboardData() {
@@ -271,20 +267,18 @@
                 const response = await fetch(API_URL + "?stall_id=" + MY_STALL_ID);
                 const data = await response.json();
 
-                console.log("Dashboard Data:", data); // Debugging
+                console.log("Dashboard Data:", data);
 
                 if (data.error) {
                     console.error("Server Error:", data.message);
                     return;
                 }
 
-                // Update Metrics
-                // We use Number().toLocaleString() to add commas (e.g. 1,500)
+
                 document.getElementById('dispRevenue').innerText = 'LKR ' + Number(data.revenue).toLocaleString();
                 document.getElementById('dispOrders').innerText = data.orders;
                 document.getElementById('dispPending').innerText = data.pending;
 
-                // Render Lists & Charts
                 renderTopItems(data.top_items);
                 renderChart(data.chart);
 
@@ -320,7 +314,6 @@
         function renderChart(chartData) {
             const ctx = document.getElementById('salesChart').getContext('2d');
 
-            // **FIX**: Destroy old chart instance to prevent flickering/stacking
             if (myChart) {
                 myChart.destroy();
             }

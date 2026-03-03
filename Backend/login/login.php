@@ -13,8 +13,6 @@ if ($user_input === $correct_username && $pass_input === $correct_password) {
     exit(); 
 
 } else {
-    
-    echo "<h1>Login Failed</h1>";
-    echo "<p>Invalid Student ID or Password. Please <a href='../../frontend/pages/login.html'>try again</a>.</p>";
+   
 }
 ?>

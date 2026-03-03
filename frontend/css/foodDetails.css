@@ -1,10 +1,10 @@
-/* Food Items */
+
 .food-card button:hover {
     background: #FFC300;
     color: #003E7E;
 }
 
-/* ✅ METHANA PASTE KARANNA — FOOD DETAILS CSS */
+
 .food-details-container {
     max-width: 500px;
     margin: 30px auto;

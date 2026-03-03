@@ -1,27 +1,22 @@
 
-    // --- 1. GLOBAL VARIABLES ---
     let allStallsData = [];
     const CART_KEY = 'nsbm_cart';
 
-    // --- 2. INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
-        
-        // A. CHECK URL FOR TABLE NUMBER (QR SCAN)
+
         const urlParams = new URLSearchParams(window.location.search);
-        const tableId = urlParams.get('table'); // e.g. ?table=5
+        const tableId = urlParams.get('table');
 
         if (tableId) {
-            // Save to Local Storage so it persists across pages
+
             localStorage.setItem('nsbm_table_id', tableId);
         }
 
-        // B. DISPLAY TABLE BADGE IF EXISTS
         const savedTable = localStorage.getItem('nsbm_table_id');
         if (savedTable) {
             const badge = document.getElementById('headerTableBadge');
             const text = document.getElementById('tableNumberText');
-            
-            // Only update if elements exist in HTML
+
             if (badge && text) {
                 badge.style.display = 'flex';
                 text.innerText = `Table #${savedTable}`;
@@ -29,21 +24,17 @@
         }
 
         loadStalls();
-        updateCartPopup(); // Check cart on page load
+        updateCartPopup();
     });
 
-    // --- 3. LOAD STALLS (API) ---
-// --- 3. LOAD STALLS (API) ---
+
     async function loadStalls() {
         const container = document.getElementById('storesContainer');
-        
-        // Base API URL
+
         let apiUrl = '../../Backend/TableController/loadAssignTables.php';
 
-        // 1. Check if we have a Table ID stored
         const storedTableId = localStorage.getItem('nsbm_table_id');
 
-        // 2. If yes, append it to the URL query string
         if (storedTableId) {
             apiUrl += `?table_id=${storedTableId}`;
             console.log("Fetching filtered stalls for Table:", storedTableId);
@@ -55,8 +46,8 @@
             const response = await fetch(apiUrl);
             const stalls = await response.json();
             
-            allStallsData = stalls; // Update global data
-            renderStalls(stalls);   // Update UI
+            allStallsData = stalls;
+            renderStalls(stalls);
 
         } catch (error) {
             console.error('Error loading stalls:', error);
@@ -70,7 +61,6 @@
         }
     }
 
-    // --- 4. RENDER FUNCTIONS ---
     function renderStalls(stalls) {
         const container = document.getElementById('storesContainer');
         container.innerHTML = ''; 
@@ -88,14 +78,13 @@
             const rootPath = "../../"; 
             let imageUrl = "https://via.placeholder.com/600x400?text=NSBM+Store"; 
 
-            // Image Path Logic
             if (stall.image_path) {
                 if (stall.image_path.includes('Backend') || stall.image_path.includes('backend')) {
                     imageUrl = rootPath + stall.image_path;
                 } else if (stall.image_path.includes('uploads/')) {
                     imageUrl = rootPath + "Backend/" + stall.image_path;
                 } else {
-                    imageUrl = stall.image_path; // Assume full URL
+                    imageUrl = stall.image_path;
                 }
             }
 
@@ -138,7 +127,6 @@
         renderStalls(filtered);
     }
 
-    // --- 5. CART POPUP LOGIC ---
     function updateCartPopup() {
         const cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
         const popup = document.getElementById('cartPopup');

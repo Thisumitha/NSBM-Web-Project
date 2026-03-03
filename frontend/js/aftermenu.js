@@ -1,14 +1,11 @@
-// Get store name from URL
+
 const params = new URLSearchParams(window.location.search);
 const storeName = params.get("store");
 
-// Display store name in header
 document.getElementById("storeName").innerText = storeName;
 
-// Categories
 const categories = ["Rice & Curry", "Kottu", "Biryani", "Fried Rice", "Noodles", "Burgers", "Drinks"];
 
-// Food items by category
 const foods = {
     "Rice & Curry": [
         { name: "Chicken Curry + Rice", price: 850, img: "../Resources/aftermenu/c1.jpg" },
@@ -48,7 +45,6 @@ const foods = {
 const categoryContainer = document.getElementById("categoryContainer");
 const foodContainer = document.getElementById("foodContainer");
 
-// Load categories dynamically
 categories.forEach(category => {
     const div = document.createElement("div");
     div.className = "category-card";
@@ -58,7 +54,6 @@ categories.forEach(category => {
     categoryContainer.appendChild(div);
 });
 
-// Load foods dynamically
 function loadFoods(category) {
     foodContainer.innerHTML = "";
 
@@ -86,5 +81,5 @@ function loadFoods(category) {
 
     });
 }
-// Load first category by default
+
 loadFoods(categories[0]);       

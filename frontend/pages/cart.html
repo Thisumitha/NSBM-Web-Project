@@ -183,7 +183,6 @@
             }
         }
 
-        // --- UPDATED: PLACE ORDER TO BACKEND ---
         async function placeOrder() {
             const cart = JSON.parse(localStorage.getItem(CART_KEY));
             if(!cart || cart.length === 0) return;

@@ -7,7 +7,6 @@ if (!foodList || !selectedName) {
   container.innerHTML = "<p>No food selected</p>";
 } else {
 
-  // 🔁 LOOP ekak athule details generate wenne mehema
   foodList.forEach(food => {
 
     if (food.name === selectedName) {

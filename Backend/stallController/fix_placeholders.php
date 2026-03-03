@@ -1,6 +1,6 @@
 <?php
-// fix_placeholders.php
-// This script cleans existing database entries that use via.placeholder.com
+
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 include '../DBMSConector/db_connect.php';
@@ -9,7 +9,6 @@ $response = array();
 
 $placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1 1'%3E%3Crect fill='%23cccccc' width='1' height='1'/%3E%3C/svg%3E";
 
-// 1. Update menu_items table
 $sql_menu = "UPDATE menu_items SET image_url = ? WHERE image_url LIKE '%via.placeholder.com%' OR image_url = 'https://via.placeholder.com/150'";
 $stmt_menu = $conn->prepare($sql_menu);
 
@@ -22,7 +21,6 @@ if ($stmt_menu) {
     $response['menu_error'] = $conn->error;
 }
 
-// 2. Update stalls table
 $sql_stall = "UPDATE stalls SET image_path = ? WHERE image_path LIKE '%via.placeholder.com%' OR image_path = 'https://via.placeholder.com/100'";
 $stmt_stall = $conn->prepare($sql_stall);
 

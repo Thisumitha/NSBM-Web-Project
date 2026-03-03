@@ -23,7 +23,7 @@
             overflow-x: hidden;
         }
 
-        /* --- Sidebar --- */
+        
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -31,7 +31,7 @@
             top: 0;
             left: 0;
             background: #1e293b;
-            /* Slate Dark */
+            
             color: white;
             padding: 20px;
             z-index: 1000;
@@ -62,7 +62,7 @@
             text-decoration: none;
         }
 
-        /* --- Main Content --- */
+        
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 30px;
@@ -82,7 +82,7 @@
             }
         }
 
-        /* --- Kanban Board Styling --- */
+        
         .kanban-col {
             background: #e2e8f0;
             border-radius: 16px;
@@ -98,7 +98,7 @@
             padding: 0 5px;
         }
 
-        /* Order Ticket Styling */
+        
         .order-card {
             background: white;
             border: none;
@@ -128,17 +128,17 @@
             background-color: #f59e0b;
         }
 
-        /* Amber */
+        
         .status-preparing::before {
             background-color: #3b82f6;
         }
 
-        /* Blue */
+        
         .status-ready::before {
             background-color: #10b981;
         }
 
-        /* Green */
+        
 
         .order-items {
             background-color: #f8fafc;
@@ -231,10 +231,9 @@
     </div>
 
     <script>
-        // --- 1. GET ID FROM LOCAL STORAGE (UPDATED) ---
+
         const MY_STALL_ID = localStorage.getItem('stall_id');
 
-        // If no ID is found, kick them back to login
         if (!MY_STALL_ID) {
             alert("You are not logged in!");
             window.location.href = 'stall_login.html';
@@ -246,20 +245,17 @@
             window.location.href = 'stall_login.html';
         }
 
-        // --- CONFIGURATION ---
         const API_GET = '../../Backend/stallController/get_live_orders.php';
         const API_UPDATE = '../../Backend/stallController/update_order_status.php';
 
-        // --- CLOCK ---
         setInterval(() => {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }, 1000);
 
-        // --- MAIN LOGIC ---
         document.addEventListener('DOMContentLoaded', () => {
             loadOrders();
-            setInterval(loadOrders, 5000); // Poll every 5 seconds
+            setInterval(loadOrders, 5000);
         });
 
         async function loadOrders() {
@@ -273,7 +269,7 @@
         }
 
         function processAndRender(data) {
-            // 1. Group raw items by Order ID
+
             const groupedOrders = {};
 
             data.forEach(row => {
@@ -292,7 +288,6 @@
                 groupedOrders[row.order_id].total += (parseFloat(row.price) * parseInt(row.quantity));
             });
 
-            // 2. Clear Columns
             const cols = {
                 'Pending': document.getElementById('col-pending'),
                 'Cooking': document.getElementById('col-preparing'),
@@ -303,7 +298,6 @@
 
             let counts = { Pending: 0, Cooking: 0, Ready: 0 };
 
-            // 3. Generate HTML
             Object.values(groupedOrders).forEach(order => {
 
                 let targetCol = cols[order.status];
@@ -314,7 +308,6 @@
 
                     const itemsHtml = order.itemsList.join('<br>');
 
-                    // Determine Button
                     let actionBtn = '';
                     if (order.status === 'Pending') {
                         actionBtn = `<button class="btn btn-primary w-100 fw-bold btn-sm py-2 rounded-3" onclick="updateStatus(${order.id}, 'Cooking')">
@@ -355,7 +348,6 @@
                 }
             });
 
-            // 4. Update Header Badges
             document.getElementById('count-pending').innerText = counts.Pending || 0;
             document.getElementById('count-preparing').innerText = counts.Cooking || 0;
             document.getElementById('count-ready').innerText = counts.Ready || 0;

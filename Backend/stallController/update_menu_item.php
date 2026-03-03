@@ -1,5 +1,5 @@
 <?php
-// update_menu_item.php
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 include '../DBMSConector/db_connect.php';
@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Handle Image Upload
     $upload_dir = "../uploads/";
     $final_image_path = null;
 
@@ -37,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Update Query
     if ($final_image_path) {
         $sql = "UPDATE menu_items SET item_name=?, price=?, category=?, image_url=? WHERE id=?";
         $stmt = $conn->prepare($sql);
